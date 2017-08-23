@@ -126,12 +126,6 @@
     <Compile Include="IoC\OwinWindsorDependencyScope.cs" />
     <Compile Include="IoC\WindsorHttpDependencyResolver.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\PoorManWork\PoorManWork.csproj">
-      <Project>{099c7291-7fe4-4aae-8325-de8486bb731a}</Project>
-      <Name>PoorManWork</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
