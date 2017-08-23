@@ -55,7 +55,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PoorManWork\PoorManWork.csproj">
+    <ProjectReference Include="..\..\src\PoorManWork\PoorManWork.csproj">
       <Project>{099c7291-7fe4-4aae-8325-de8486bb731a}</Project>
       <Name>PoorManWork</Name>
     </ProjectReference>
