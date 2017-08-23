@@ -6,12 +6,12 @@ namespace PoorManWorkManager
 {
     public class PoorManProducer<T> : PoorManWorker<T> where T : IPoorManWorkItem
     {
-        private readonly int _workCheckingBackoff_ms;
-        private readonly Func<CancellationToken, T> _workFactoryMethod;
+        private readonly EventWaitHandle _workArrived;
+        private readonly Func<CancellationToken, T[]> _workFactoryMethod;
 
-        public PoorManProducer (int workCheckingBackoff_ms, Func<CancellationToken, T> workFactoryMethod)
+        public PoorManProducer (EventWaitHandle workArrived, Func<CancellationToken, T[]> workFactoryMethod)
         {
-            _workCheckingBackoff_ms = workCheckingBackoff_ms;
+            _workArrived = workArrived;
             _workFactoryMethod = workFactoryMethod;
         }
 
@@ -19,14 +19,21 @@ namespace PoorManWorkManager
         {
             while (true)
             {
-                GetAllAvailableWork(workQueue, cancellationToken);
-
-                if (cancellationToken.IsCancellationRequested ||
-                    cancellationToken.WaitHandle.WaitOne(_workCheckingBackoff_ms))
+                if (cancellationToken.IsCancellationRequested || WaitForWork(cancellationToken))
                 {
                     break;
                 }
+
+                GetAllAvailableWork(workQueue, cancellationToken);
             }
+        }
+
+        private bool WaitForWork(CancellationToken cancellationToken)
+        {
+            var eventThatSignaledIndex = WaitHandle.WaitAny(new [] { cancellationToken.WaitHandle, _workArrived });
+            var wasCanceled = eventThatSignaledIndex == 0;
+
+            return wasCanceled;
         }
 
         private void GetAllAvailableWork(BlockingCollection<T> workQueue,
@@ -34,15 +41,16 @@ namespace PoorManWorkManager
         {
             while (true)
             {
-                var workItem = _workFactoryMethod(cancellationToken);
+                var workItems = _workFactoryMethod(cancellationToken);
 
-                if (workItem != null && !cancellationToken.IsCancellationRequested)
-                {
-                    workQueue.Add(workItem, cancellationToken);
-                }
-                else
+                if (workItems == null || cancellationToken.IsCancellationRequested)
                 {
                     break;
+                }
+
+                foreach (var workItem in workItems)
+                {
+                    workQueue.Add(workItem, cancellationToken);
                 }
             }
         }

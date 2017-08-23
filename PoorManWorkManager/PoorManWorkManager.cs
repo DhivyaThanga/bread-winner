@@ -12,13 +12,14 @@ namespace PoorManWorkManager
         private CancellationTokenSource _cancellationTokenSource;
         private volatile bool _isStarted = false;
 
-        public void Start(int concurrency, int workCheckingBackoff_ms, Func<CancellationToken, T> workFactoryMethod)
+        public void Start(int concurrency, EventWaitHandle workArrived, Func<CancellationToken, T[]> workFactoryMethod)
         {
             if (!_isStarted)
             {
                 _isStarted = true;
-                _producer = new PoorManProducer<T>(workCheckingBackoff_ms, workFactoryMethod);
-                _consumerPool = new PoorManConsumerPool<T>(concurrency);
+                _producer = new PoorManProducer<T>(workArrived, workFactoryMethod);
+                var consumers = InstantiateConsumers(concurrency);
+                _consumerPool = new PoorManWorkerPool<T>(consumers);
                 _workQueue = new BlockingCollection<T>();
                 _cancellationTokenSource = new CancellationTokenSource();
 
@@ -29,6 +30,16 @@ namespace PoorManWorkManager
             {
                 throw new ApplicationException("Manager already started");
             }
+        }
+
+        private static IPoorManWorker<T>[] InstantiateConsumers(int concurrency)
+        {
+            var consumers = new IPoorManWorker<T>[concurrency];
+            for (var i = 0; i < consumers.Length; i++)
+            {
+                consumers[i] = new PoorManConsumer<T>();
+            }
+            return consumers;
         }
 
         public void Dispose()

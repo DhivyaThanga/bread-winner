@@ -4,19 +4,14 @@ using System.Threading;
 
 namespace PoorManWorkManager
 {
-    public class PoorManConsumerPool<T> : IPoorManWorker<T> where T : IPoorManWorkItem
+    public class PoorManWorkerPool<T> : IPoorManWorker<T> where T : IPoorManWorkItem
     {
-        private readonly IPoorManWorker<T>[] _consumers;
+        private readonly IPoorManWorker<T>[] _workers;
         private volatile bool _isStarted = false;
 
-        public PoorManConsumerPool(int concurrency)
+        public PoorManWorkerPool(IPoorManWorker<T>[] workers)
         {
-            _consumers = new IPoorManWorker<T>[concurrency];
-
-            for (var i = 0; i < _consumers.Length; i++)
-            {
-                _consumers[i] = new PoorManConsumer<T>();
-            }
+            _workers = workers;
         }
 
         public void Start(BlockingCollection<T> workQueue, CancellationToken cancellationToken)
@@ -24,14 +19,14 @@ namespace PoorManWorkManager
             if (!_isStarted)
             {
                 _isStarted = true;
-                foreach (var consumer in _consumers)
+                foreach (var consumer in _workers)
                 {
                     consumer.Start(workQueue, cancellationToken);
                 }
             }
             else
             {
-                throw new ApplicationException("Consumers already started");
+                throw new ApplicationException("Workers already started");
             }
         }
 
@@ -39,7 +34,7 @@ namespace PoorManWorkManager
         {
             if (!_isStarted) return;
 
-            foreach (var consumer in _consumers)
+            foreach (var consumer in _workers)
             {
                 consumer.Stop();
             }

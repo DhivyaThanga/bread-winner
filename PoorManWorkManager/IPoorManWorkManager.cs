@@ -5,6 +5,6 @@ namespace PoorManWorkManager
 {
     public interface IPoorManWorkManager<in T> : IDisposable where T : IPoorManWorkItem
     {
-        void Start(int concurrency, int workCheckingBackoff_ms, Func<CancellationToken, T> workFactoryMethod);
+        void Start(int concurrency, EventWaitHandle workArrived, Func<CancellationToken, T[]> workFactoryMethod);
     }
 }

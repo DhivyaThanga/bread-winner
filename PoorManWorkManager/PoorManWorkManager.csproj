@@ -44,9 +44,11 @@
     <Compile Include="IPoorManWorkItem.cs" />
     <Compile Include="IPoorManWorkManager.cs" />
     <Compile Include="PoorManConsumer.cs" />
-    <Compile Include="PoorManConsumerPool.cs" />
+    <Compile Include="PoorManSynchronizer.cs" />
+    <Compile Include="PoorManWorkerPool.cs" />
     <Compile Include="PoorManProducer.cs" />
     <Compile Include="PoorManWorker.cs" />
+    <Compile Include="PoorManSyncedWorkItem.cs" />
     <Compile Include="PoorManWorkManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

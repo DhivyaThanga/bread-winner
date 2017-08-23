@@ -16,6 +16,7 @@ namespace ConsoleApp
         public void Do(CancellationToken cancellationToken)
         {
             Console.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId} consuming {Id}");
+            cancellationToken.WaitHandle.WaitOne(2000);
         }
     }
 }
