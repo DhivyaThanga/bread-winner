@@ -4,9 +4,9 @@ using PoorManWork;
 
 namespace PoorManWorkManager
 {
-    public interface IPoorManWorkerFactory<T> where T : IPoorManWorkItem
+    public interface IPoorManWorkerFactory
     {
-        IPoorManWorker<T> CreateConsumer();
-        IPoorManWorker<T> CreateProducer(EventWaitHandle workArrived, Func<CancellationToken, T[]> workFactoryMethod);
+        IPoorManWorker CreateConsumer();
+        IPoorManWorker CreateProducer(EventWaitHandle workArrived, Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod);
     }
 }

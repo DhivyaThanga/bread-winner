@@ -4,17 +4,17 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    internal class PoorManWorkerPool<T> : IPoorManWorker<T> where T : IPoorManWorkItem
+    internal class PoorManWorkerPool : IPoorManWorker
     {
-        private readonly IPoorManWorker<T>[] _workers;
+        private readonly IPoorManWorker[] _workers;
         private volatile bool _isStarted = false;
 
-        public PoorManWorkerPool(IPoorManWorker<T>[] workers)
+        public PoorManWorkerPool(IPoorManWorker[] workers)
         {
             _workers = workers;
         }
 
-        public void Start(BlockingCollection<T> workQueue, CancellationToken cancellationToken)
+        public void Start(BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken)
         {
             if (!_isStarted && !cancellationToken.IsCancellationRequested)
             {

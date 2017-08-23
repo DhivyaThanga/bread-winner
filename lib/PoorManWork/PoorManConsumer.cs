@@ -3,9 +3,10 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    internal class PoorManConsumer<T> : PoorManWorker<T> where T : IPoorManWorkItem
+    internal class PoorManConsumer : PoorManWorker
     {
-        protected override void Loop(BlockingCollection<T> workQueue, CancellationToken cancellationToken) 
+        protected override void Loop(
+            BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken) 
         {
             while (!cancellationToken.IsCancellationRequested)
             {

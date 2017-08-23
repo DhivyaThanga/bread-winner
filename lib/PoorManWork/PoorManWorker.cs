@@ -4,11 +4,11 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    internal abstract class PoorManWorker<T> : IPoorManWorker<T> where T : IPoorManWorkItem
+    internal abstract class PoorManWorker : IPoorManWorker
     {
         protected Thread WrappedThread { get; set; }
 
-        public void Start(BlockingCollection<T> workQueue, CancellationToken cancellationToken)
+        public void Start(BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken)
         {
             WrappedThread = new Thread(GetThreadAction(workQueue, cancellationToken))
             {
@@ -18,7 +18,8 @@ namespace PoorManWork
             WrappedThread.Start();
         }
 
-        private ThreadStart GetThreadAction(BlockingCollection<T> workQueue, CancellationToken cancellationToken)
+        private ThreadStart GetThreadAction(
+            BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken)
         {
             return () =>
             {
@@ -33,7 +34,8 @@ namespace PoorManWork
             };
         }
 
-        protected abstract void Loop(BlockingCollection<T> workQueue, CancellationToken cancellationToken);
+        protected abstract void Loop(
+            BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken);
 
         public void Stop()
         {

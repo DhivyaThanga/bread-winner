@@ -4,18 +4,18 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class PoorManWorkFacade<T> : IPoorManWorkFacade where T : IPoorManWorkItem
+    public class PoorManWorkFacade : IPoorManWorkFacade
     {
-        private readonly IPoorManWorker<T> _producer;
-        private readonly IPoorManWorker<T> _consumerPool;
-        private readonly BlockingCollection<T> _workQueue;
+        private readonly IPoorManWorker _producer;
+        private readonly IPoorManWorker _consumerPool;
+        private readonly BlockingCollection<IPoorManWorkItem> _workQueue;
         private volatile bool _isStarted = false;
 
-        public PoorManWorkFacade(IPoorManWorker<T> producer, IPoorManWorker<T>[] consumers)
+        public PoorManWorkFacade(IPoorManWorker producer, IPoorManWorker[] consumers)
         {
             _producer = producer;
-            _consumerPool = new PoorManWorkerPool<T>(consumers);
-            _workQueue = new BlockingCollection<T>();
+            _consumerPool = new PoorManWorkerPool(consumers);
+            _workQueue = new BlockingCollection<IPoorManWorkItem>();
         }
 
         public void Start(CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ namespace PoorManWork
             if (!_isStarted)
             {
                 throw new ApplicationException(
-                    $"{nameof(PoorManWorkFacade<T>)} not started, cannot stop");
+                    $"{nameof(PoorManWorkFacade)} not started, cannot stop");
             }
 
             _isStarted = false;

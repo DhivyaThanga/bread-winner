@@ -20,12 +20,12 @@ namespace ConsoleApp
                 are, () => Interlocked.Exchange(ref _count, 0), _cancellationTokenSource.Token);
             _cancellationTokenSource = new CancellationTokenSource();
 
-            var factory = new PoorManWorkerFactory<DummyWorkItem>();
+            var factory = new PoorManWorkerFactory();
 
             var producer = factory.CreateProducer(are, WorkBatchFactoryMethod);
             var consumers = factory.CreateConsumerArray(2);
 
-            _poorManWorkFacade = new PoorManWorkFacade<DummyWorkItem>(producer, consumers);
+            _poorManWorkFacade = new PoorManWorkFacade(producer, consumers);
         }
 
         public void Start()

@@ -4,18 +4,20 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    internal class PoorManProducer<T> : PoorManWorker<T> where T : IPoorManWorkItem
+    internal class PoorManProducer : PoorManWorker
     {
         private readonly EventWaitHandle _workArrived;
-        private readonly Func<CancellationToken, T[]> _workFactoryMethod;
+        private readonly Func<CancellationToken, IPoorManWorkItem[]> _workFactoryMethod;
 
-        public PoorManProducer (EventWaitHandle workArrived, Func<CancellationToken, T[]> workFactoryMethod)
+        public PoorManProducer (
+            EventWaitHandle workArrived, Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
         {
             _workArrived = workArrived;
             _workFactoryMethod = workFactoryMethod;
         }
 
-        protected override void Loop(BlockingCollection<T> workQueue, CancellationToken cancellationToken)
+        protected override void Loop(
+            BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -36,7 +38,8 @@ namespace PoorManWork
             return wasCanceled;
         }
 
-        private void GetAllAvailableWork(BlockingCollection<T> workQueue,
+        private void GetAllAvailableWork(
+            BlockingCollection<IPoorManWorkItem> workQueue,
             CancellationToken cancellationToken)
         {
             while (true)

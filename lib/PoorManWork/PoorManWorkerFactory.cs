@@ -4,23 +4,23 @@ using PoorManWork;
 
 namespace PoorManWorkManager
 {
-    public class PoorManWorkerFactory<T> : IPoorManWorkerFactory<T> where T : IPoorManWorkItem
+    public class PoorManWorkerFactory : IPoorManWorkerFactory
     {
-        public IPoorManWorker<T> CreateConsumer()
+        public IPoorManWorker CreateConsumer()
         {
-            return new PoorManConsumer<T>();
+            return new PoorManConsumer();
         }
 
-        public IPoorManWorker<T> CreateProducer(
+        public IPoorManWorker CreateProducer(
             EventWaitHandle workArrived,
-            Func<CancellationToken, T[]> workFactoryMethod)
+            Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
         {
-            return new PoorManProducer<T>(workArrived, workFactoryMethod);
+            return new PoorManProducer(workArrived, workFactoryMethod);
         }
 
-        public IPoorManWorker<T>[] CreateConsumerArray(int size)
+        public IPoorManWorker[] CreateConsumerArray(int size)
         {
-            var consumers = new IPoorManWorker<T>[size];
+            var consumers = new IPoorManWorker[size];
             for (int i = 0; i < consumers.Length; i++)
             {
                 consumers[i] = CreateConsumer();
