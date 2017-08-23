@@ -41,14 +41,14 @@ namespace PoorManWorkManager
         {
             while (true)
             {
-                var workItems = _workFactoryMethod(cancellationToken);
+                var workBatch = _workFactoryMethod(cancellationToken);
 
-                if (workItems == null || cancellationToken.IsCancellationRequested)
+                if (workBatch == null || cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }
 
-                foreach (var workItem in workItems)
+                foreach (var workItem in workBatch)
                 {
                     workQueue.Add(workItem, cancellationToken);
                 }

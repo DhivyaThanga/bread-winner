@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 
 namespace PoorManWorkManager
 {
-    public class PoorManSynchronizer
+    public class PoorManWorkBatchSynchronizer
     {
-        private int _workSize;
+        private int _workBatchSize;
 
-        public PoorManSynchronizer(int workSize)
+        public PoorManWorkBatchSynchronizer(int workBatchSize)
         {
-            if (workSize < 1)
+            if (workBatchSize < 1)
             {
                 throw new ArgumentException();
             }
 
-            _workSize = workSize;
+            _workBatchSize = workBatchSize;
         }
 
         public bool WorkDone()
         {
-            Interlocked.Decrement(ref _workSize);
-            return _workSize == 0;
+            Interlocked.Decrement(ref _workBatchSize);
+            return _workBatchSize == 0;
         }
     }
 }

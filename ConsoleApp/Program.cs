@@ -11,11 +11,13 @@ namespace ConsoleApp
     {
         private static void Main(string[] args)
         {
-            using (var pfl = new DummyProductFactorLoader())
+            using (var sdpfl = new SyncedDummyProductFactorLoader())
             {
-                pfl.Start();
+                sdpfl.Start();
                 Console.ReadKey();
             }
+
+            Console.ReadKey();
         }
     }
 }

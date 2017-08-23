@@ -42,14 +42,14 @@
   <ItemGroup>
     <Compile Include="IPoorManWorker.cs" />
     <Compile Include="IPoorManWorkItem.cs" />
-    <Compile Include="IPoorManWorkManager.cs" />
+    <Compile Include="IPoorManWorkFacade.cs" />
     <Compile Include="PoorManConsumer.cs" />
-    <Compile Include="PoorManSynchronizer.cs" />
+    <Compile Include="PoorManWorkBatchSynchronizer.cs" />
     <Compile Include="PoorManWorkerPool.cs" />
     <Compile Include="PoorManProducer.cs" />
     <Compile Include="PoorManWorker.cs" />
     <Compile Include="PoorManSyncedWorkItem.cs" />
-    <Compile Include="PoorManWorkManager.cs" />
+    <Compile Include="PoorManWorkFacade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

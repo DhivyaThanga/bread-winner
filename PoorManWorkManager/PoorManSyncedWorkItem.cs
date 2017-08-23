@@ -4,19 +4,19 @@ namespace PoorManWorkManager
 {
     public abstract class PoorManSyncedWorkItem : IPoorManWorkItem
     {
-        private readonly PoorManSynchronizer _synchronizer;
+        private readonly PoorManWorkBatchSynchronizer _workBatchSynchronizer;
         private readonly CancellationToken _cancellationToken;
 
-        internal PoorManSyncedWorkItem(PoorManSynchronizer synchronizer, CancellationToken cancellationToken)
+        protected PoorManSyncedWorkItem(PoorManWorkBatchSynchronizer workBatchSynchronizer, CancellationToken cancellationToken)
         {
-            _synchronizer = synchronizer;
+            _workBatchSynchronizer = workBatchSynchronizer;
             _cancellationToken = cancellationToken;
         }
 
         public void Do(CancellationToken cancellationToken)
         {
             DoAlways(_cancellationToken);
-            if (_synchronizer.WorkDone())
+            if (_workBatchSynchronizer.WorkDone())
             {
                 DoFinally(_cancellationToken);
             }
