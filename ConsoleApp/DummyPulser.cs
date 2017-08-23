@@ -1,28 +1,25 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
     public class DummyPulser
     {
-        public static Thread Create(EventWaitHandle workArrived, Action updateStateAction, CancellationToken cancellationToken)
+        public static Task Create(EventWaitHandle workArrived, Action updateStateAction, CancellationToken cancellationToken)
         {
-            var emitter = new Thread(() =>
+            var pulser = new Task(() =>
             {
-                while (true)
+                while (!cancellationToken.IsCancellationRequested)
                 {
                     Console.WriteLine("Dummy Pulser: hearthbeat...");
                     updateStateAction();
                     workArrived.Set();
                     cancellationToken.WaitHandle.WaitOne(10000);
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        break;
-                    }
                 }
-            });
+            }, cancellationToken, TaskCreationOptions.LongRunning);
 
-            return emitter;
+            return pulser;
         }
     }
 }

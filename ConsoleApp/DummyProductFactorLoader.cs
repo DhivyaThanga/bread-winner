@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using PoorManWorkManager;
 
 namespace ConsoleApp
@@ -9,7 +10,7 @@ namespace ConsoleApp
     {
         private readonly IPoorManWorkFacade _poorManWorkFacade;
         private static int _count;
-        private readonly Thread _workEmitter;
+        private readonly Task _workEmitter;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
         public DummyProductFactorLoader()
@@ -33,10 +34,7 @@ namespace ConsoleApp
         {
             _cancellationTokenSource.Cancel();
 
-            if (_workEmitter.Join(1000))
-            {
-                _workEmitter.Abort();
-            }
+            _workEmitter.Wait();
         }
 
         private static DummyWorkItem[] WorkBatchFactoryMethod(CancellationToken cancellationToken)
