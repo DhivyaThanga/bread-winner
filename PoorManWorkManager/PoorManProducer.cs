@@ -2,14 +2,14 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace Api.PoorManWorkManager
+namespace PoorManWorkManager
 {
     public class PoorManProducer<T> : PoorManWorker<T> where T : IPoorManWorkItem
     {
         private readonly int _workCheckingBackoff_ms;
-        private readonly Func<T> _workFactoryMethod;
+        private readonly Func<CancellationToken, T> _workFactoryMethod;
 
-        public PoorManProducer (int workCheckingBackoff_ms, Func<T> workFactoryMethod)
+        public PoorManProducer (int workCheckingBackoff_ms, Func<CancellationToken, T> workFactoryMethod)
         {
             _workCheckingBackoff_ms = workCheckingBackoff_ms;
             _workFactoryMethod = workFactoryMethod;
@@ -21,7 +21,11 @@ namespace Api.PoorManWorkManager
             {
                 GetAllAvailableWork(workQueue, cancellationToken);
 
-                if (cancellationToken.WaitHandle.WaitOne(_workCheckingBackoff_ms)) break;
+                if (cancellationToken.IsCancellationRequested ||
+                    cancellationToken.WaitHandle.WaitOne(_workCheckingBackoff_ms))
+                {
+                    break;
+                }
             }
         }
 
@@ -30,8 +34,9 @@ namespace Api.PoorManWorkManager
         {
             while (true)
             {
-                var workItem = _workFactoryMethod();
-                if (workItem != null)
+                var workItem = _workFactoryMethod(cancellationToken);
+
+                if (workItem != null && !cancellationToken.IsCancellationRequested)
                 {
                     workQueue.Add(workItem, cancellationToken);
                 }

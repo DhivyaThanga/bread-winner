@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 
-namespace Api.PoorManWorkManager
+namespace PoorManWorkManager
 {
     public class PoorManConsumer<T> : PoorManWorker<T> where T : IPoorManWorkItem
     {
@@ -11,8 +11,10 @@ namespace Api.PoorManWorkManager
             {
                 var workItem = workQueue.Take(cancellationToken);
                 if (cancellationToken.IsCancellationRequested)
+                {
                     break;
-                workItem.Do();
+                }
+                workItem.Do(cancellationToken);
             }
         }
     }

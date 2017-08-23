@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 
-namespace Api.PoorManWorkManager
+namespace PoorManWorkManager
 {
     public interface IPoorManWorker<T> where T : IPoorManWorkItem
     {

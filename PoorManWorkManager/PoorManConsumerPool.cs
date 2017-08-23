@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace Api.PoorManWorkManager
+namespace PoorManWorkManager
 {
     public class PoorManConsumerPool<T> : IPoorManWorker<T> where T : IPoorManWorkItem
     {
