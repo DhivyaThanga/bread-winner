@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace PoorManWorkManager
+namespace PoorManWork
 {
     public class PoorManWorkFacade<T> : IPoorManWorkFacade where T : IPoorManWorkItem
     {

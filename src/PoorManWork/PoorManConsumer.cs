@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 
-namespace PoorManWorkManager
+namespace PoorManWork
 {
     public class PoorManConsumer<T> : PoorManWorker<T> where T : IPoorManWorkItem
     {

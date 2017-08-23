@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace PoorManWorkManager
+namespace PoorManWork
 {
     public abstract class PoorManSyncedWorkItem : IPoorManWorkItem
     {

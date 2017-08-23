@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace PoorManWorkManager
+namespace PoorManWork
 {
     public abstract class PoorManWorker<T> : IPoorManWorker<T> where T : IPoorManWorkItem
     {

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 
-namespace PoorManWorkManager
+namespace PoorManWork
 {
     public interface IPoorManWorkFacade
     {

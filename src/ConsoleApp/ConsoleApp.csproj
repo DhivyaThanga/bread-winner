@@ -55,9 +55,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PoorManWorkManager\PoorManWorkManager.csproj">
+    <ProjectReference Include="..\PoorManWork\PoorManWork.csproj">
       <Project>{099c7291-7fe4-4aae-8325-de8486bb731a}</Project>
-      <Name>PoorManWorkManager</Name>
+      <Name>PoorManWork</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
