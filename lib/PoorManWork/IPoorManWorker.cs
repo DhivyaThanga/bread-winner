@@ -5,7 +5,7 @@ namespace PoorManWork
 {
     public interface IPoorManWorker
     {
-        void Start(BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken);
+        void Start(CancellationToken cancellationToken);
 
         void Stop();
     }

@@ -7,17 +7,20 @@ namespace PoorManWork
     internal class PoorManProducer : PoorManWorker
     {
         private readonly EventWaitHandle _workArrived;
+        private readonly Action<IPoorManWorkItem[], CancellationToken> _addWork;
         private readonly Func<CancellationToken, IPoorManWorkItem[]> _workFactoryMethod;
 
         public PoorManProducer (
-            EventWaitHandle workArrived, Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
+            EventWaitHandle workArrived, 
+            Action<IPoorManWorkItem[], CancellationToken> addWork,
+            Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
         {
             _workArrived = workArrived;
+            _addWork = addWork;
             _workFactoryMethod = workFactoryMethod;
         }
 
-        protected override void Loop(
-            BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken)
+        protected override void Loop( CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -26,7 +29,7 @@ namespace PoorManWork
                     break;
                 }
 
-                GetAllAvailableWork(workQueue, cancellationToken);
+                GetAllAvailableWork(cancellationToken);
             }
         }
 
@@ -38,9 +41,7 @@ namespace PoorManWork
             return wasCanceled;
         }
 
-        private void GetAllAvailableWork(
-            BlockingCollection<IPoorManWorkItem> workQueue,
-            CancellationToken cancellationToken)
+        private void GetAllAvailableWork(CancellationToken cancellationToken)
         {
             while (true)
             {
@@ -51,10 +52,8 @@ namespace PoorManWork
                     break;
                 }
 
-                foreach (var workItem in workBatch)
-                {
-                    workQueue.Add(workItem, cancellationToken);
-                }
+                _addWork(workBatch, cancellationToken);
+
             }
         }
     }

@@ -6,43 +6,60 @@ namespace PoorManWork
 {
     public class PoorManWorkFacade : IPoorManWorkFacade
     {
+        private readonly CancellationToken _cancellationToken;
         private readonly IPoorManWorker _producer;
-        private readonly IPoorManWorker _consumerPool;
+        private readonly PoorManWorkerPool _consumerPool;
         private readonly BlockingCollection<IPoorManWorkItem> _workQueue;
         private volatile bool _isStarted = false;
 
-        public PoorManWorkFacade(IPoorManWorker producer, IPoorManWorker[] consumers)
+        public PoorManWorkFacade(CancellationToken cancellationToken)
         {
-            _producer = producer;
-            _consumerPool = new PoorManWorkerPool(consumers);
+            _cancellationToken = cancellationToken;
+            _consumerPool = new PoorManWorkerPool();
             _workQueue = new BlockingCollection<IPoorManWorkItem>();
         }
 
-        public void Start(CancellationToken cancellationToken)
+        public void AddProducer(
+            EventWaitHandle workArrived,
+            Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
         {
-            if (!_isStarted && !cancellationToken.IsCancellationRequested)
-            {
-                _isStarted = true;
+            _consumerPool.Add(
+                new PoorManProducer(workArrived, AddWork, workFactoryMethod));
+        }
 
-                _consumerPool.Start(_workQueue, cancellationToken);
-                _producer.Start(_workQueue, cancellationToken);
-            }
-            else
+        public void AddProducer(PoorManPulser pulser, Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
+        {
+            AddProducer(pulser.WorkArrived, workFactoryMethod);
+        }
+
+        public void AddConsumers(int n)
+        {
+            for (var i = 0; i < n; i++)
             {
-                throw new ApplicationException("Manager already started");
+                _consumerPool.Add(new PoorManConsumer(TakeWork));
             }
+        }
+
+        private void AddWork(IPoorManWorkItem[] workBatch, CancellationToken cancellationToken)
+        {
+            foreach (var workItem in workBatch)
+            {
+                _workQueue.Add(workItem, cancellationToken);
+            }
+        }
+
+        private IPoorManWorkItem TakeWork(CancellationToken cancellationToken)
+        {
+            return _workQueue.Take(cancellationToken);
+        }
+
+        public void Start()
+        {
+            _consumerPool.Start(_cancellationToken);
         }
 
         public void Stop()
         {
-            if (!_isStarted)
-            {
-                throw new ApplicationException(
-                    $"{nameof(PoorManWorkFacade)} not started, cannot stop");
-            }
-
-            _isStarted = false;
-            _producer.Stop();
             _consumerPool.Stop();
         }
     }

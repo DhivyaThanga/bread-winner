@@ -1,16 +1,23 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 
 namespace PoorManWork
 {
     internal class PoorManConsumer : PoorManWorker
     {
-        protected override void Loop(
-            BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken) 
+        private readonly Func<CancellationToken, IPoorManWorkItem> _takeWork;
+
+        internal PoorManConsumer(Func<CancellationToken, IPoorManWorkItem> takeWork)
+        {
+            _takeWork = takeWork;
+        }
+
+        protected override void Loop(CancellationToken cancellationToken) 
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var workItem = workQueue.Take(cancellationToken);
+                var workItem = _takeWork(cancellationToken);
                 if (cancellationToken.IsCancellationRequested)
                 {
                     break;

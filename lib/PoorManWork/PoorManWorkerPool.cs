@@ -1,27 +1,33 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace PoorManWork
 {
     internal class PoorManWorkerPool : IPoorManWorker
     {
-        private readonly IPoorManWorker[] _workers;
+        private readonly List<IPoorManWorker> _workers;
         private volatile bool _isStarted = false;
 
-        public PoorManWorkerPool(IPoorManWorker[] workers)
+        public PoorManWorkerPool()
         {
-            _workers = workers;
+            _workers = new List<IPoorManWorker>();
         }
 
-        public void Start(BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken)
+        public void Add(params IPoorManWorker[] workers)
+        {
+            _workers.AddRange(workers);
+        }
+
+        public void Start(CancellationToken cancellationToken)
         {
             if (!_isStarted && !cancellationToken.IsCancellationRequested)
             {
                 _isStarted = true;
                 foreach (var worker in _workers)
                 {
-                    worker.Start(workQueue, cancellationToken);
+                    worker.Start(cancellationToken);
                 }
             }
             else

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Threading;
 
 namespace PoorManWork
@@ -8,9 +7,9 @@ namespace PoorManWork
     {
         protected Thread WrappedThread { get; set; }
 
-        public void Start(BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken)
+        public void Start(CancellationToken cancellationToken)
         {
-            WrappedThread = new Thread(GetThreadAction(workQueue, cancellationToken))
+            WrappedThread = new Thread(GetThreadAction(cancellationToken))
             {
                 IsBackground = true
             };
@@ -18,14 +17,13 @@ namespace PoorManWork
             WrappedThread.Start();
         }
 
-        private ThreadStart GetThreadAction(
-            BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken)
+        private ThreadStart GetThreadAction(CancellationToken cancellationToken)
         {
             return () =>
             {
                 try
                 {
-                    Loop(workQueue, cancellationToken);
+                    Loop(cancellationToken);
                 }
                 catch (OperationCanceledException)
                 {
@@ -34,8 +32,7 @@ namespace PoorManWork
             };
         }
 
-        protected abstract void Loop(
-            BlockingCollection<IPoorManWorkItem> workQueue, CancellationToken cancellationToken);
+        protected abstract void Loop(CancellationToken cancellationToken);
 
         public void Stop()
         {

@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractProductFactorLoader.cs" />
     <Compile Include="SyncedDummyProductFactorLoader.cs" />
-    <Compile Include="DummyPulser.cs" />
     <Compile Include="SyncedDummyWorkItem.cs" />
     <Compile Include="DummyProductFactorLoader.cs" />
     <Compile Include="DummyWorkItem.cs" />
