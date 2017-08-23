@@ -1,4 +1,4 @@
-namespace Api.ProductFactorLoader
+namespace Api.PoorManWorkManager
 {
     public interface IPoorManWorkItem
     {
