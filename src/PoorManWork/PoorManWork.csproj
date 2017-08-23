@@ -41,10 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IPoorManWorker.cs" />
+    <Compile Include="IPoorManWorkerFactory.cs" />
     <Compile Include="IPoorManWorkItem.cs" />
     <Compile Include="IPoorManWorkFacade.cs" />
     <Compile Include="PoorManConsumer.cs" />
     <Compile Include="PoorManWorkBatchSynchronizer.cs" />
+    <Compile Include="PoorManWorkerFactory.cs" />
     <Compile Include="PoorManWorkerPool.cs" />
     <Compile Include="PoorManProducer.cs" />
     <Compile Include="PoorManWorker.cs" />

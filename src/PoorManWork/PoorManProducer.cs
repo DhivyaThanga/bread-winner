@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class PoorManProducer<T> : PoorManWorker<T> where T : IPoorManWorkItem
+    internal class PoorManProducer<T> : PoorManWorker<T> where T : IPoorManWorkItem
     {
         private readonly EventWaitHandle _workArrived;
         private readonly Func<CancellationToken, T[]> _workFactoryMethod;

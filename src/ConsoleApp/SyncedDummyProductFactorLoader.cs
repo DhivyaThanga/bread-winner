@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using PoorManWork;
+using PoorManWorkManager;
 
 namespace ConsoleApp
 {
@@ -18,7 +19,13 @@ namespace ConsoleApp
             var are = new AutoResetEvent(false);
             _workEmitter = DummyPulser.Create(
                 are, () => Interlocked.Exchange(ref _count, 0), _cancellationTokenSource.Token);
-            _poorManWorkFacade = new PoorManWorkFacade<SyncedDummyWorkItem>(3, are, WorkBatchFactoryMethod);
+
+            var factory = new PoorManWorkerFactory<SyncedDummyWorkItem>();
+
+            var producer = factory.CreateProducer(are, WorkBatchFactoryMethod);
+            var consumers = factory.CreateConsumerArray(2);
+
+            _poorManWorkFacade = new PoorManWorkFacade<SyncedDummyWorkItem>(producer, consumers);
         }
 
         public void Start()

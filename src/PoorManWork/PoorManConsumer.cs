@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class PoorManConsumer<T> : PoorManWorker<T> where T : IPoorManWorkItem
+    internal class PoorManConsumer<T> : PoorManWorker<T> where T : IPoorManWorkItem
     {
         protected override void Loop(BlockingCollection<T> workQueue, CancellationToken cancellationToken) 
         {

@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public abstract class PoorManWorker<T> : IPoorManWorker<T> where T : IPoorManWorkItem
+    internal abstract class PoorManWorker<T> : IPoorManWorker<T> where T : IPoorManWorkItem
     {
         protected Thread WrappedThread { get; set; }
 

@@ -11,12 +11,9 @@ namespace PoorManWork
         private readonly BlockingCollection<T> _workQueue;
         private volatile bool _isStarted = false;
 
-        public PoorManWorkFacade(int concurrency,
-            EventWaitHandle workArrived,
-            Func<CancellationToken, T[]> workFactoryMethod)
+        public PoorManWorkFacade(IPoorManWorker<T> producer, IPoorManWorker<T>[] consumers)
         {
-            _producer = new PoorManProducer<T>(workArrived, workFactoryMethod);
-            var consumers = InstantiateConsumers(concurrency);
+            _producer = producer;
             _consumerPool = new PoorManWorkerPool<T>(consumers);
             _workQueue = new BlockingCollection<T>();
         }
@@ -34,16 +31,6 @@ namespace PoorManWork
             {
                 throw new ApplicationException("Manager already started");
             }
-        }
-
-        private static IPoorManWorker<T>[] InstantiateConsumers(int concurrency)
-        {
-            var consumers = new IPoorManWorker<T>[concurrency];
-            for (var i = 0; i < consumers.Length; i++)
-            {
-                consumers[i] = new PoorManConsumer<T>();
-            }
-            return consumers;
         }
 
         public void Stop()

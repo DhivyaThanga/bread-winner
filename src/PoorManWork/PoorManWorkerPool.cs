@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class PoorManWorkerPool<T> : IPoorManWorker<T> where T : IPoorManWorkItem
+    internal class PoorManWorkerPool<T> : IPoorManWorker<T> where T : IPoorManWorkItem
     {
         private readonly IPoorManWorker<T>[] _workers;
         private volatile bool _isStarted = false;

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using PoorManWork;
+using PoorManWorkManager;
 
 namespace ConsoleApp
 {
@@ -19,8 +20,12 @@ namespace ConsoleApp
                 are, () => Interlocked.Exchange(ref _count, 0), _cancellationTokenSource.Token);
             _cancellationTokenSource = new CancellationTokenSource();
 
+            var factory = new PoorManWorkerFactory<DummyWorkItem>();
 
-            _poorManWorkFacade = new PoorManWorkFacade<DummyWorkItem>(2, are, WorkBatchFactoryMethod);
+            var producer = factory.CreateProducer(are, WorkBatchFactoryMethod);
+            var consumers = factory.CreateConsumerArray(2);
+
+            _poorManWorkFacade = new PoorManWorkFacade<DummyWorkItem>(producer, consumers);
         }
 
         public void Start()
