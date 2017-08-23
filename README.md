@@ -11,5 +11,5 @@ Every worker instance uses it's own thread, therefore use with caution at your o
 
 To install, you can use the related nuget package.
 ```powershell
-Install-Package PoorManWork -Version 0.2.0
+Install-Package PoorManWork -Version 0.3.0
 ```
