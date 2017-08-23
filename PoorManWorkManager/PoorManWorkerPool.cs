@@ -19,9 +19,9 @@ namespace PoorManWorkManager
             if (!_isStarted && !cancellationToken.IsCancellationRequested)
             {
                 _isStarted = true;
-                foreach (var consumer in _workers)
+                foreach (var worker in _workers)
                 {
-                    consumer.Start(workQueue, cancellationToken);
+                    worker.Start(workQueue, cancellationToken);
                 }
             }
             else
