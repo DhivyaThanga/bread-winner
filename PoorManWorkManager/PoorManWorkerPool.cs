@@ -16,7 +16,7 @@ namespace PoorManWorkManager
 
         public void Start(BlockingCollection<T> workQueue, CancellationToken cancellationToken)
         {
-            if (!_isStarted)
+            if (!_isStarted && !cancellationToken.IsCancellationRequested)
             {
                 _isStarted = true;
                 foreach (var consumer in _workers)

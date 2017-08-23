@@ -23,7 +23,7 @@ namespace PoorManWorkManager
 
         public void Start(CancellationToken cancellationToken)
         {
-            if (!_isStarted)
+            if (!_isStarted && !cancellationToken.IsCancellationRequested)
             {
                 _isStarted = true;
 

@@ -7,13 +7,14 @@ namespace PoorManWorkManager
     {
         protected override void Loop(BlockingCollection<T> workQueue, CancellationToken cancellationToken) 
         {
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 var workItem = workQueue.Take(cancellationToken);
                 if (cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }
+
                 workItem.Do(cancellationToken);
             }
         }

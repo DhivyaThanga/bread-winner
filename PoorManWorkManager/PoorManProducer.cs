@@ -17,9 +17,9 @@ namespace PoorManWorkManager
 
         protected override void Loop(BlockingCollection<T> workQueue, CancellationToken cancellationToken)
         {
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                if (cancellationToken.IsCancellationRequested || WaitForWork(cancellationToken))
+                if (WaitForWork(cancellationToken))
                 {
                     break;
                 }
