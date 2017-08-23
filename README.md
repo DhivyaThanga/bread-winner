@@ -1,4 +1,4 @@
-# Poor Man Work or Producer Consumer in C#
+# Poor Man Work
 
 Poor man implementation of producer consumer paradigm in C#.
 
