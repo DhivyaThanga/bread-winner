@@ -17,7 +17,6 @@ namespace ConsoleApp
 
             _workEmitter = new PoorManPulser(
                 new TimeSpan(days:0, hours:0, minutes:0, seconds:10), 
-                _cancellationTokenSource.Token, 
                 () =>
                 {
                     Console.WriteLine("Dummy Pulser: hearthbeat...");
@@ -37,7 +36,7 @@ namespace ConsoleApp
         public void Start()
         {
             _poorManBoundedBuffer.Start(_cancellationTokenSource.Token);
-            _workEmitter.Start();
+            _workEmitter.Start(_cancellationTokenSource.Token);
         }
 
         protected abstract IPoorManWorkItem[] WorkBatchFactoryMethod(CancellationToken cancellationToken);

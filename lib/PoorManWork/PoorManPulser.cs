@@ -1,48 +1,29 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace PoorManWork
 {
-    public class PoorManPulser
+    public class PoorManPulser : PoorManWorker
     {
-        private readonly Task _pulser;
+        private readonly TimeSpan _interval;
+        private readonly Action _updateStateAction;
 
         internal EventWaitHandle WorkArrived { get; }
 
-        public PoorManPulser(TimeSpan interval, CancellationToken cancellationToken, Action updateStateAction = null)
+        public PoorManPulser(TimeSpan interval,  Action updateStateAction = null)
         {
+            _interval = interval;
+            _updateStateAction = updateStateAction;
             WorkArrived = new AutoResetEvent(false);
-
-            if (cancellationToken != CancellationToken.None)
-            {
-                cancellationToken.Register(Stop);
-            }
-
-            _pulser = new Task(() =>
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    updateStateAction?.Invoke();
-                    WorkArrived.Set();
-                    cancellationToken.WaitHandle.WaitOne(interval);
-                }
-            }, cancellationToken, TaskCreationOptions.LongRunning);
         }
 
-        public void Start()
+        protected override void Loop(CancellationToken cancellationToken)
         {
-            if (_pulser.Status == TaskStatus.Created)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                _pulser.Start();
-            }
-        }
-
-        private void Stop()
-        {
-            if (_pulser.Status != TaskStatus.Created)
-            {
-                _pulser.Wait();
+                _updateStateAction?.Invoke();
+                WorkArrived.Set();
+                cancellationToken.WaitHandle.WaitOne(_interval);
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Api
             var workAvailableRepo = new WorkAvailableRepo(new TimeSpan(0, 0, 0, 15), 2);
             var workFactory = new DummyWorkFactory(workAvailableRepo);
 
-            var pulser = new PoorManPulser(new TimeSpan(0, 0, 0, 10), cancellationToken,
+            var pulser = new PoorManPulser(new TimeSpan(0, 0, 0, 10),
                 () => { Debug.WriteLine("Dummy Pulser: hearthbeat..."); });
 
             var boundedBuffer = new ScheduledSingleProducerBoundedBuffer(pulser, 100, workFactory.Create);

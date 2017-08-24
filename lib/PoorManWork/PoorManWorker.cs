@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    internal abstract class PoorManWorker : IPoorManWorker
+    public abstract class PoorManWorker : IPoorManWorker
     {
         protected Thread WrappedThread { get; set; }
 

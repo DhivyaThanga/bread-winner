@@ -35,7 +35,7 @@ namespace PoorManWork
         public void Start(CancellationToken cancellationToken)
         {
             _poorManBoundedBuffer.Start(cancellationToken);
-            _workEmitter.Start();
+            _workEmitter.Start(cancellationToken);
         }
     }
 }
