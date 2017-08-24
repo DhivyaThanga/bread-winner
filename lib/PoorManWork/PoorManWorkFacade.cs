@@ -7,15 +7,13 @@ namespace PoorManWork
     public class PoorManWorkFacade : IPoorManWorkFacade
     {
         private readonly CancellationToken _cancellationToken;
-        private readonly IPoorManWorker _producer;
-        private readonly PoorManWorkerPool _consumerPool;
+        private readonly PoorManWorkerPool _workerPool;
         private readonly BlockingCollection<IPoorManWorkItem> _workQueue;
-        private volatile bool _isStarted = false;
 
         public PoorManWorkFacade(CancellationToken cancellationToken)
         {
             _cancellationToken = cancellationToken;
-            _consumerPool = new PoorManWorkerPool();
+            _workerPool = new PoorManWorkerPool();
             _workQueue = new BlockingCollection<IPoorManWorkItem>();
         }
 
@@ -23,7 +21,7 @@ namespace PoorManWork
             EventWaitHandle workArrived,
             Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
         {
-            _consumerPool.Add(
+            _workerPool.Add(
                 new PoorManProducer(workArrived, AddWork, workFactoryMethod));
         }
 
@@ -36,7 +34,7 @@ namespace PoorManWork
         {
             for (var i = 0; i < n; i++)
             {
-                _consumerPool.Add(new PoorManConsumer(TakeWork));
+                _workerPool.Add(new PoorManConsumer(TakeWork));
             }
         }
 
@@ -55,12 +53,12 @@ namespace PoorManWork
 
         public void Start()
         {
-            _consumerPool.Start(_cancellationToken);
+            _workerPool.Start(_cancellationToken);
         }
 
         public void Stop()
         {
-            _consumerPool.Stop();
+            _workerPool.Stop();
         }
     }
 }

@@ -53,7 +53,6 @@ namespace PoorManWork
                 }
 
                 _addWork(workBatch, cancellationToken);
-
             }
         }
     }
