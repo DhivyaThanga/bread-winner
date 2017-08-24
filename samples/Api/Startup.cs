@@ -34,15 +34,7 @@ namespace Api
             config.UseDefaultJsonConverter();
             config.UseDefaultRoutes();
 
-            var workFactory = new WorkFactory();
-
-            var pulser = new PoorManPulser(new TimeSpan(0, 0, 0, 10), appBuilder.GetOnAppDisposing(), () =>
-            {
-                Debug.WriteLine("Dummy Pulser: hearthbeat...");
-                workFactory.Reset();
-            });
-
-            appBuilder.StartBoundedBuffer(pulser, 2, workFactory);
+            BoundedBufferStartup.Start(appBuilder);
 
             appBuilder
                 .UseWindsorScopeMidddleware()

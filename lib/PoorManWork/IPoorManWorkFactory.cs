@@ -1,7 +1,6 @@
 ﻿using System.Threading;
-using PoorManWork;
 
-namespace PoorManWorkManager
+namespace PoorManWork
 {
     public interface IPoorManWorkFactory
     {

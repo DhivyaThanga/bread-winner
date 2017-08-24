@@ -123,11 +123,13 @@
     <Compile Include="IoC\Extensions\HttpConfigurationWindsorExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\HttpConfigurationExtensions.cs" />
+    <Compile Include="ReadFromBlobWorkFactory.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="IoC\OwinWindsorDependencyScope.cs" />
     <Compile Include="IoC\WindsorHttpDependencyResolver.cs" />
     <Compile Include="SyncedDummyWorkItem.cs" />
-    <Compile Include="WorkFactory.cs" />
+    <Compile Include="DummyWorkFactory.cs" />
+    <Compile Include="WorkAvailableRepo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\PoorManWork\PoorManWork.csproj">

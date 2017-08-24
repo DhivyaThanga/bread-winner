@@ -3,27 +3,24 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using PoorManWork;
-using PoorManWorkManager;
 
 namespace Api
 {
-    public class WorkFactory : IPoorManWorkFactory
+    public class DummyWorkFactory : IPoorManWorkFactory
     {
-        private int _count;
+        private readonly WorkAvailableRepo _workAvailableRepo;
 
-        public void Reset()
+        public DummyWorkFactory(WorkAvailableRepo workAvailableRepo)
         {
-            Interlocked.Exchange(ref _count, 0);
+            _workAvailableRepo = workAvailableRepo;
         }
 
         public IPoorManWorkItem[] Create(CancellationToken cancellationToken)
         {
-            if (_count > 1)
+            if (!_workAvailableRepo.IsWorkAvailable())
             {
                 return null;
             }
-
-            Interlocked.Increment(ref _count);
 
             if (cancellationToken.WaitHandle.WaitOne(1000))
             {
