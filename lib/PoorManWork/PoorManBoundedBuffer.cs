@@ -4,15 +4,13 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class PoorManWorkFacade : IPoorManWorkFacade
+    public class PoorManBoundedBuffer : IPoorManManager
     {
-        private readonly CancellationToken _cancellationToken;
         private readonly PoorManWorkerPool _workerPool;
         private readonly BlockingCollection<IPoorManWorkItem> _workQueue;
 
-        public PoorManWorkFacade(CancellationToken cancellationToken)
+        public PoorManBoundedBuffer()
         {
-            _cancellationToken = cancellationToken;
             _workerPool = new PoorManWorkerPool();
             _workQueue = new BlockingCollection<IPoorManWorkItem>();
         }
@@ -51,14 +49,9 @@ namespace PoorManWork
             return _workQueue.Take(cancellationToken);
         }
 
-        public void Start()
+        public void Start(CancellationToken cancellationToken)
         {
-            _workerPool.Start(_cancellationToken);
-        }
-
-        public void Stop()
-        {
-            _workerPool.Stop();
+            _workerPool.Start(cancellationToken);
         }
     }
 }

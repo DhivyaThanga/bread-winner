@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace Api
+namespace Api.Extensions
 {
     public static class HttpConfigurationExtensions
     {

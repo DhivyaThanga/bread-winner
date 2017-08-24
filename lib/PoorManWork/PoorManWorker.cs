@@ -9,6 +9,11 @@ namespace PoorManWork
 
         public void Start(CancellationToken cancellationToken)
         {
+            if (cancellationToken != CancellationToken.None)
+            {
+                cancellationToken.Register(Stop);
+            }
+
             WrappedThread = new Thread(GetThreadAction(cancellationToken))
             {
                 IsBackground = true
@@ -34,7 +39,7 @@ namespace PoorManWork
 
         protected abstract void Loop(CancellationToken cancellationToken);
 
-        public void Stop()
+        private void Stop()
         {
             if (!WrappedThread.Join(1000))
             {

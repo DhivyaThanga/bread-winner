@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="IPoorManWorker.cs" />
     <Compile Include="IPoorManWorkItem.cs" />
-    <Compile Include="IPoorManWorkFacade.cs" />
+    <Compile Include="IPoorManManager.cs" />
     <Compile Include="PoorManConsumer.cs" />
     <Compile Include="PoorManPulser.cs" />
     <Compile Include="PoorManWorkBatchSynchronizer.cs" />
@@ -50,8 +50,9 @@
     <Compile Include="PoorManProducer.cs" />
     <Compile Include="PoorManWorker.cs" />
     <Compile Include="PoorManSyncedWorkItem.cs" />
-    <Compile Include="PoorManWorkFacade.cs" />
+    <Compile Include="PoorManBoundedBuffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduledSingleProducerBoundedBuffer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

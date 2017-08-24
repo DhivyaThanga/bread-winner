@@ -6,7 +6,7 @@ namespace ConsoleApp
 {
     public abstract class AbstractProductFactorLoader : IDisposable
     {
-        private readonly IPoorManWorkFacade _poorManWorkFacade;
+        private readonly IPoorManManager _poorManBoundedBuffer;
         protected static int Count;
         private readonly PoorManPulser _workEmitter;
         private readonly CancellationTokenSource _cancellationTokenSource;
@@ -17,27 +17,26 @@ namespace ConsoleApp
 
             _workEmitter = new PoorManPulser(
                 new TimeSpan(days:0, hours:0, minutes:0, seconds:10), 
+                _cancellationTokenSource.Token, 
                 () =>
                 {
                     Console.WriteLine("Dummy Pulser: hearthbeat...");
                     Interlocked.Exchange(ref Count, 0);
-                }, 
-                _cancellationTokenSource.Token);
+                });
 
-            _poorManWorkFacade = new PoorManWorkFacade(_cancellationTokenSource.Token);
-            _poorManWorkFacade.AddConsumers(2);
-            _poorManWorkFacade.AddProducer(_workEmitter, WorkBatchFactoryMethod);
+            _poorManBoundedBuffer = new PoorManBoundedBuffer();
+            _poorManBoundedBuffer.AddConsumers(2);
+            _poorManBoundedBuffer.AddProducer(_workEmitter, WorkBatchFactoryMethod);
         }
 
         public void Dispose()
         {
             _cancellationTokenSource.Cancel();
-            _workEmitter.Stop();
         }
 
         public void Start()
         {
-            _poorManWorkFacade.Start();
+            _poorManBoundedBuffer.Start(_cancellationTokenSource.Token);
             _workEmitter.Start();
         }
 

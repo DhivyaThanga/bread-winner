@@ -113,6 +113,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\AppBuilderExtensions.cs" />
     <Compile Include="Dependency\HttpClientStub.cs" />
     <Compile Include="Dependency\IHttpClient.cs" />
     <Compile Include="IoC\Extensions\AppBuilderWindsorExtensions.cs" />
@@ -121,10 +122,16 @@
     <Compile Include="IoC\Installer\DependencyInstaller.cs" />
     <Compile Include="IoC\Extensions\HttpConfigurationWindsorExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="HttpConfigurationExtensions.cs" />
+    <Compile Include="Extensions\HttpConfigurationExtensions.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="IoC\OwinWindsorDependencyScope.cs" />
     <Compile Include="IoC\WindsorHttpDependencyResolver.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\lib\PoorManWork\PoorManWork.csproj">
+      <Project>{099c7291-7fe4-4aae-8325-de8486bb731a}</Project>
+      <Name>PoorManWork</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

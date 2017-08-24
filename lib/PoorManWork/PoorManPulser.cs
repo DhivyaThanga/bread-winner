@@ -10,15 +10,20 @@ namespace PoorManWork
 
         internal EventWaitHandle WorkArrived { get; }
 
-        public PoorManPulser(TimeSpan interval, Action updateStateAction, CancellationToken cancellationToken)
+        public PoorManPulser(TimeSpan interval, CancellationToken cancellationToken, Action updateStateAction = null)
         {
             WorkArrived = new AutoResetEvent(false);
+
+            if (cancellationToken != CancellationToken.None)
+            {
+                cancellationToken.Register(Stop);
+            }
 
             _pulser = new Task(() =>
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    updateStateAction();
+                    updateStateAction?.Invoke();
                     WorkArrived.Set();
                     cancellationToken.WaitHandle.WaitOne(interval);
                 }
@@ -30,9 +35,12 @@ namespace PoorManWork
             _pulser.Start();
         }
 
-        public void Stop()
+        private void Stop()
         {
-            _pulser.Wait();
+            if (_pulser.Status != TaskStatus.Created)
+            {
+                _pulser.Wait();
+            }
         }
     }
 }

@@ -35,17 +35,5 @@ namespace PoorManWork
                 throw new ApplicationException("Workers already started");
             }
         }
-
-        public void Stop()
-        {
-            if (!_isStarted) return;
-
-            foreach (var consumer in _workers)
-            {
-                consumer.Stop();
-            }
-
-            _isStarted = false;
-        }
     }
 }

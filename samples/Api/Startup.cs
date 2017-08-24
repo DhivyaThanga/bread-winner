@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Api;
+using Api.Extensions;
 using Api.IoC;
 using Api.IoC.Extensions;
 using Castle.Windsor;
