@@ -36,6 +36,16 @@ namespace PoorManWork
             }
         }
 
+        /// <summary>
+        /// Calling this method will cause the bounded buffer only to start.
+        /// Any pulser that was passed to the AddProducer method needs to be started independently.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        public void Start(CancellationToken cancellationToken)
+        {
+            _workerPool.Start(cancellationToken);
+        }
+
         private void AddWork(IPoorManWorkItem[] workBatch, CancellationToken cancellationToken)
         {
             foreach (var workItem in workBatch)
@@ -47,11 +57,6 @@ namespace PoorManWork
         private IPoorManWorkItem TakeWork(CancellationToken cancellationToken)
         {
             return _workQueue.Take(cancellationToken);
-        }
-
-        public void Start(CancellationToken cancellationToken)
-        {
-            _workerPool.Start(cancellationToken);
         }
     }
 }

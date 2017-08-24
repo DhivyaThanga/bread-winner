@@ -32,7 +32,10 @@ namespace PoorManWork
 
         public void Start()
         {
-            _pulser.Start();
+            if (_pulser.Status == TaskStatus.Created)
+            {
+                _pulser.Start();
+            }
         }
 
         private void Stop()

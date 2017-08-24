@@ -113,6 +113,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppBuilderExtensions.cs" />
     <Compile Include="Dependency\HttpClientStub.cs" />
     <Compile Include="Dependency\IHttpClient.cs" />
     <Compile Include="IoC\Extensions\AppBuilderWindsorExtensions.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="IoC\OwinWindsorDependencyScope.cs" />
     <Compile Include="IoC\WindsorHttpDependencyResolver.cs" />
     <Compile Include="SyncedDummyWorkItem.cs" />
+    <Compile Include="WorkFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\PoorManWork\PoorManWork.csproj">
