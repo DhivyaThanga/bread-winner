@@ -1,10 +1,9 @@
 using System;
 using System.Threading;
-using PoorManWork;
 
-namespace Api
+namespace PoorManWork
 {
-    public class ScheduledSingleProducerBoundedBuffer : IDisposable
+    public class ExampleSingleProducerBoundedBuffer : IDisposable
     {
         private readonly IPoorManManager _poorManBoundedBuffer;
         protected static int Count;
@@ -12,34 +11,42 @@ namespace Api
         private readonly CancellationToken _cancellationToken;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
-        public ScheduledSingleProducerBoundedBuffer(
+        public ExampleSingleProducerBoundedBuffer(
             TimeSpan schedule,
             int consumers, 
             Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
         {
             _cancellationTokenSource = new CancellationTokenSource();
-
             _workEmitter = new PoorManPulser(schedule, _cancellationTokenSource.Token);
-
             _poorManBoundedBuffer = new PoorManBoundedBuffer();
             _poorManBoundedBuffer.AddConsumers(consumers);
             _poorManBoundedBuffer.AddProducer(_workEmitter, workFactoryMethod);
         }
 
-        public ScheduledSingleProducerBoundedBuffer(
+        public ExampleSingleProducerBoundedBuffer(
             PoorManPulser pulser,
             CancellationToken cancellationToken,
             int consumers,
             Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
         {
             _cancellationTokenSource = new CancellationTokenSource();
-
             _workEmitter = pulser;
             _cancellationToken = cancellationToken;
-
             _poorManBoundedBuffer = new PoorManBoundedBuffer();
             _poorManBoundedBuffer.AddConsumers(consumers);
             _poorManBoundedBuffer.AddProducer(_workEmitter, workFactoryMethod);
+        }
+
+        public ExampleSingleProducerBoundedBuffer(
+            EventWaitHandle workArrived,
+            CancellationToken cancellationToken,
+            int consumers,
+            Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
+        {
+            _cancellationToken = cancellationToken;
+            _poorManBoundedBuffer = new PoorManBoundedBuffer();
+            _poorManBoundedBuffer.AddConsumers(consumers);
+            _poorManBoundedBuffer.AddProducer(workArrived, workFactoryMethod);
         }
 
         public void Dispose()
@@ -51,7 +58,7 @@ namespace Api
         {
             var cancellationToken = _cancellationTokenSource?.Token ?? _cancellationToken;
             _poorManBoundedBuffer.Start(cancellationToken);
-            _workEmitter.Start();
+            _workEmitter?.Start();
         }
     }
 }

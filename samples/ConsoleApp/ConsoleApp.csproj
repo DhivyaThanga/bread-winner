@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractProductFactorLoader.cs" />
+    <Compile Include="ExampleSingleProducerBoundedBuffer.cs" />
     <Compile Include="SyncedDummyProductFactorLoader.cs" />
     <Compile Include="SyncedDummyWorkItem.cs" />
     <Compile Include="DummyProductFactorLoader.cs" />
