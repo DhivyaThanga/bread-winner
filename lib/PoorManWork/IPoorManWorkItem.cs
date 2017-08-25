@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 
 namespace PoorManWork
@@ -7,5 +8,7 @@ namespace PoorManWork
         string Id { get; }
 
         void Do(CancellationToken cancellationToken);
+
+        PoorManWorkItemStatus WorkItemStatus { get; }
     }
 }

@@ -52,6 +52,7 @@
     <Compile Include="PoorManWorker.cs" />
     <Compile Include="PoorManSyncedWorkItem.cs" />
     <Compile Include="PoorManBoundedBuffer.cs" />
+    <Compile Include="PoorManWorkItemStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduledSingleProducerBoundedBuffer.cs" />
   </ItemGroup>

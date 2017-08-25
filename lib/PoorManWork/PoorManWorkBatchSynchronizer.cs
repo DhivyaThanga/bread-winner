@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 
 namespace PoorManWork
@@ -6,6 +7,8 @@ namespace PoorManWork
     public class PoorManWorkBatchSynchronizer
     {
         private int _workBatchSize;
+
+        public ConcurrentBag<IPoorManWorkItem> FailedWorkItems { get; }
 
         public PoorManWorkBatchSynchronizer(int workBatchSize)
         {
@@ -15,11 +18,17 @@ namespace PoorManWork
             }
 
             _workBatchSize = workBatchSize;
+            FailedWorkItems = new ConcurrentBag<IPoorManWorkItem>();
         }
 
-        public bool WorkDone()
+        public bool WorkDone(IPoorManWorkItem workItem)
         {
             Interlocked.Decrement(ref _workBatchSize);
+            if (workItem.WorkItemStatus == PoorManWorkItemStatus.Failed)
+            {
+                FailedWorkItems.Add(workItem);
+            }
+
             return _workBatchSize == 0;
         }
     }

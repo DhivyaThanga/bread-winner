@@ -18,6 +18,11 @@ namespace ConsoleApp
             cancellationToken.WaitHandle.WaitOne(2000);
         }
 
+        protected override void DoAlwaysErrorCallback(Exception exception, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void DoFinally(CancellationToken cancellationToken)
         {
             Console.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId}, consuming {Id}, LAST OF THE BATCH");

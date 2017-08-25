@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace PoorManWork
 {
@@ -8,6 +9,7 @@ namespace PoorManWork
         private readonly CancellationToken _cancellationToken;
 
         public string Id { get; }
+        public PoorManWorkItemStatus WorkItemStatus { get; private set; }
 
         protected PoorManSyncedWorkItem(
             string id, PoorManWorkBatchSynchronizer workBatchSynchronizer, CancellationToken cancellationToken)
@@ -19,14 +21,26 @@ namespace PoorManWork
 
         public void Do(CancellationToken cancellationToken)
         {
-            DoAlways(_cancellationToken);
-            if (_workBatchSynchronizer.WorkDone())
+            try
+            {
+                DoAlways(_cancellationToken);
+                WorkItemStatus = PoorManWorkItemStatus.Completed;
+            }
+            catch (Exception exception)
+            {
+                WorkItemStatus = PoorManWorkItemStatus.Failed;
+                DoAlwaysErrorCallback(exception, cancellationToken);
+            }
+
+            if (_workBatchSynchronizer.WorkDone(this))
             {
                 DoFinally(_cancellationToken);
             }
         }
 
         protected abstract void DoAlways(CancellationToken cancellationToken);
+
+        protected abstract void DoAlwaysErrorCallback(Exception exception, CancellationToken cancellationToken);
 
         protected abstract void DoFinally(CancellationToken cancellationToken);
     }

@@ -27,6 +27,11 @@ namespace Api.BlobExample
             }
         }
 
+        protected override void DoAlwaysErrorCallback(Exception exception, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void DoFinally(CancellationToken cancellationToken)
         {
             Debug.WriteLine("Job Done!");
