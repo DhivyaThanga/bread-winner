@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.Azure;
@@ -16,7 +17,7 @@ namespace Api.BlobExample
         protected override void DoAlways(CancellationToken cancellationToken)
         {
             var storageAccount = CloudStorageAccount.Parse(
-                CloudConfigurationManager.GetSetting("StorageConnectionString"));
+                ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
 
             var blobClient = storageAccount.CreateCloudBlobClient();
             var blockBlob = blobClient.GetBlobReferenceFromServer(new Uri(Id));

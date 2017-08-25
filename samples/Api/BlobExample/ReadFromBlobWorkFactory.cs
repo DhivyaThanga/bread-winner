@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Configuration;
+using System.Linq;
 using System.Threading;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
@@ -12,7 +13,7 @@ namespace Api.BlobExample
         public IPoorManWorkItem[] Create(CancellationToken cancellationToken)
         {
             var storageAccount = CloudStorageAccount.Parse(
-                CloudConfigurationManager.GetSetting("StorageConnectionString"));
+                ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
             var blobClient = storageAccount.CreateCloudBlobClient();
             var container = blobClient.GetContainerReference("mycontainer");
             var blobs = container.ListBlobs("prefix", true);

@@ -1,5 +1,5 @@
 ﻿## SOLUTION SPECIFIC
-privateAppSettings.config
+*.secret.config
 
 ## RECS SPECIFIC
 # Ignore *.ncrunchproject and .ncrunchsolution as they are not source code (NCrunch suggests to share them)
