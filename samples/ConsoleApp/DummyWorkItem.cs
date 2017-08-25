@@ -10,11 +10,6 @@ namespace ConsoleApp
 
         public PoorManWorkItemStatus WorkItemStatus { get; private set; }
 
-        public void ErrorCallback(Exception exception)
-        {
-            throw exception;
-        }
-
 
         public DummyWorkItem(int id)
         {

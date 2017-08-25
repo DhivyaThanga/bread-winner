@@ -40,19 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPoorManWorker.cs" />
-    <Compile Include="IPoorManWorkFactory.cs" />
-    <Compile Include="IPoorManWorkItem.cs" />
+    <Compile Include="Workers\IPoorManWorker.cs" />
+    <Compile Include="WorkItems\IPoorManWorkFactory.cs" />
+    <Compile Include="WorkItems\IPoorManWorkItem.cs" />
     <Compile Include="IPoorManManager.cs" />
-    <Compile Include="PoorManConsumer.cs" />
-    <Compile Include="PoorManPulser.cs" />
-    <Compile Include="PoorManWorkBatchSynchronizer.cs" />
-    <Compile Include="PoorManWorkerPool.cs" />
-    <Compile Include="PoorManProducer.cs" />
-    <Compile Include="PoorManWorker.cs" />
-    <Compile Include="PoorManSyncedWorkItem.cs" />
+    <Compile Include="Workers\PoorManConsumer.cs" />
+    <Compile Include="Workers\PoorManPulser.cs" />
+    <Compile Include="WorkItems\PoorManWorkBatchSynchronizer.cs" />
+    <Compile Include="Workers\PoorManWorkerPool.cs" />
+    <Compile Include="Workers\PoorManProducer.cs" />
+    <Compile Include="Workers\PoorManWorker.cs" />
+    <Compile Include="WorkItems\PoorManSyncedWorkItem.cs" />
     <Compile Include="PoorManBoundedBuffer.cs" />
-    <Compile Include="PoorManWorkItemStatus.cs" />
+    <Compile Include="WorkItems\PoorManWorkItemStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduledSingleProducerBoundedBuffer.cs" />
   </ItemGroup>
