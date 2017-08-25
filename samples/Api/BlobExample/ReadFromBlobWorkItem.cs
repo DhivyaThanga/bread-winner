@@ -9,11 +9,8 @@ namespace Api.BlobExample
 {
     public class ReadFromBlobWorkItem : PoorManSyncedWorkItem
     {
-        private readonly Uri _blobUri;
-
-        public ReadFromBlobWorkItem(Uri blobUri, PoorManWorkBatchSynchronizer workBatchSynchronizer, CancellationToken cancellationToken) : base(workBatchSynchronizer, cancellationToken)
+        public ReadFromBlobWorkItem(string blobUri, PoorManWorkBatchSynchronizer workBatchSynchronizer, CancellationToken cancellationToken) : base(blobUri, workBatchSynchronizer, cancellationToken)
         {
-            _blobUri = blobUri;
         }
 
         protected override void DoAlways(CancellationToken cancellationToken)
@@ -22,7 +19,7 @@ namespace Api.BlobExample
                 CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
             var blobClient = storageAccount.CreateCloudBlobClient();
-            var blockBlob = blobClient.GetBlobReferenceFromServer(_blobUri);
+            var blockBlob = blobClient.GetBlobReferenceFromServer(new Uri(Id));
 
             using (var fileStream = System.IO.File.OpenWrite(@"path\myfile"))
             {

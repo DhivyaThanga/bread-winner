@@ -7,8 +7,12 @@ namespace PoorManWork
         private readonly PoorManWorkBatchSynchronizer _workBatchSynchronizer;
         private readonly CancellationToken _cancellationToken;
 
-        protected PoorManSyncedWorkItem(PoorManWorkBatchSynchronizer workBatchSynchronizer, CancellationToken cancellationToken)
+        public string Id { get; }
+
+        protected PoorManSyncedWorkItem(
+            string id, PoorManWorkBatchSynchronizer workBatchSynchronizer, CancellationToken cancellationToken)
         {
+            Id = id;
             _workBatchSynchronizer = workBatchSynchronizer;
             _cancellationToken = cancellationToken;
         }

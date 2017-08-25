@@ -4,6 +4,8 @@ namespace PoorManWork
 {
     public interface IPoorManWorkItem
     {
+        string Id { get; }
+
         void Do(CancellationToken cancellationToken);
     }
 }

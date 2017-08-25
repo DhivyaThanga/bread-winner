@@ -6,11 +6,11 @@ namespace ConsoleApp
 {
     public class DummyWorkItem : IPoorManWorkItem
     {
-        public int Id { get; }
+        public string Id { get; }
 
         public DummyWorkItem(int id)
         {
-            Id = id;
+            Id = id.ToString();
         }
 
         public void Do(CancellationToken cancellationToken)

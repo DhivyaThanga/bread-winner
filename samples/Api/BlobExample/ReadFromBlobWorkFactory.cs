@@ -20,7 +20,7 @@ namespace Api.BlobExample
             var synchronizer = new PoorManWorkBatchSynchronizer(listBlobItems.Length);
 
             return listBlobItems
-                .Select(x => new ReadFromBlobWorkItem(x.Uri, synchronizer, cancellationToken))
+                .Select(x => new ReadFromBlobWorkItem(x.Uri.AbsoluteUri, synchronizer, cancellationToken))
                 .Cast<IPoorManWorkItem>()
                 .ToArray();
         }

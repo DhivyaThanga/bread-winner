@@ -6,13 +6,10 @@ namespace ConsoleApp
 {
     public class SyncedDummyWorkItem : PoorManSyncedWorkItem
     {
-        public int Id { get; }
-
         public SyncedDummyWorkItem(
             int id, PoorManWorkBatchSynchronizer workBatchSynchronizer, CancellationToken cancellationToken) 
-            : base(workBatchSynchronizer, cancellationToken)
+            : base(id.ToString(), workBatchSynchronizer, cancellationToken)
         {
-            Id = id;
         }
 
         protected override void DoAlways(CancellationToken cancellationToken)
