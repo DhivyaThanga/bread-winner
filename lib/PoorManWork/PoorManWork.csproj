@@ -46,11 +46,11 @@
     <Compile Include="IPoorManManager.cs" />
     <Compile Include="Workers\PoorManConsumer.cs" />
     <Compile Include="Workers\PoorManPulser.cs" />
-    <Compile Include="WorkItems\PoorManWorkBatchSynchronizer.cs" />
+    <Compile Include="WorkItems\PoorManWorkBatch.cs" />
     <Compile Include="Workers\PoorManWorkerPool.cs" />
     <Compile Include="Workers\PoorManProducer.cs" />
     <Compile Include="Workers\PoorManWorker.cs" />
-    <Compile Include="WorkItems\PoorManSyncedWorkItem.cs" />
+    <Compile Include="WorkItems\PoorManBatchWorkItem.cs" />
     <Compile Include="PoorManBoundedBuffer.cs" />
     <Compile Include="WorkItems\PoorManWorkItemStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

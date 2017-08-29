@@ -35,7 +35,7 @@ namespace Api
             config.UseDefaultJsonConverter();
             config.UseDefaultRoutes();
 
-            BoundedBufferStartup.Start(appBuilder);
+            new BoundedBufferStartup().Start(appBuilder);
 
             appBuilder
                 .UseWindsorScopeMidddleware()

@@ -158,7 +158,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="IoC\OwinWindsorDependencyScope.cs" />
     <Compile Include="IoC\WindsorHttpDependencyResolver.cs" />
-    <Compile Include="DummyExample\SyncedDummyWorkItem.cs" />
+    <Compile Include="DummyExample\BatchDummyWorkItem.cs" />
     <Compile Include="DummyExample\DummyWorkFactory.cs" />
     <Compile Include="WorkAvailableRepo.cs" />
   </ItemGroup>

@@ -9,6 +9,8 @@ namespace PoorManWork
         protected static int Count;
         private readonly PoorManPulser _workEmitter;
 
+        public bool IsAlive => _poorManBoundedBuffer.IsAlive && _workEmitter.IsAlive;
+
         public ScheduledSingleProducerBoundedBuffer(
             PoorManPulser pulser,
             int consumers,

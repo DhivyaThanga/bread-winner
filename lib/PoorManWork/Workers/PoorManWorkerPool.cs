@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace PoorManWork
@@ -8,6 +9,10 @@ namespace PoorManWork
     {
         private readonly List<IPoorManWorker> _workers;
         private volatile bool _isStarted = false;
+
+        public bool IsAlive {
+            get { return _workers.Select(x => !x.IsAlive).Any(); }
+        }
 
         public PoorManWorkerPool()
         {

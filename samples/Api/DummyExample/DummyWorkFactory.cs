@@ -28,12 +28,12 @@ namespace Api
             }
 
             var rand = new Random();
-            var synchronizer = new PoorManWorkBatchSynchronizer(3);
+            var synchronizer = new PoorManWorkBatch(3);
             var workItems = new[]
             {
-                new SyncedDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
-                new SyncedDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
-                new SyncedDummyWorkItem(rand.Next(), synchronizer, cancellationToken)
+                new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
+                new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
+                new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken)
             };
 
             Debug.WriteLine(

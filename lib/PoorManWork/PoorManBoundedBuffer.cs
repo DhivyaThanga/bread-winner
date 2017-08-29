@@ -9,6 +9,8 @@ namespace PoorManWork
         private readonly PoorManWorkerPool _workerPool;
         private readonly BlockingCollection<IPoorManWorkItem> _workQueue;
 
+        public bool IsAlive => _workerPool.IsAlive;
+
         public PoorManBoundedBuffer()
         {
             _workerPool = new PoorManWorkerPool();

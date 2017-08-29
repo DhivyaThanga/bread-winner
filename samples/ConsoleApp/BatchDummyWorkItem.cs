@@ -4,11 +4,11 @@ using PoorManWork;
 
 namespace ConsoleApp
 {
-    public class SyncedDummyWorkItem : PoorManSyncedWorkItem
+    public class BatchDummyWorkItem : PoorManBatchWorkItem
     {
-        public SyncedDummyWorkItem(
-            int id, PoorManWorkBatchSynchronizer workBatchSynchronizer, CancellationToken cancellationToken) 
-            : base(id.ToString(), workBatchSynchronizer, cancellationToken)
+        public BatchDummyWorkItem(
+            int id, PoorManWorkBatch workBatch, CancellationToken cancellationToken) 
+            : base(id.ToString(), workBatch, cancellationToken)
         {
         }
 

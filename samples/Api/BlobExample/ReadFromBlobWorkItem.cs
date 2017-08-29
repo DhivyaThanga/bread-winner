@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
-using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using PoorManWork;
 
 namespace Api.BlobExample
 {
-    public class ReadFromBlobWorkItem : PoorManSyncedWorkItem
+    public class ReadFromBlobWorkItem : PoorManBatchWorkItem
     {
-        public ReadFromBlobWorkItem(string blobUri, PoorManWorkBatchSynchronizer workBatchSynchronizer, CancellationToken cancellationToken) : base(blobUri, workBatchSynchronizer, cancellationToken)
+        public ReadFromBlobWorkItem(string blobUri, PoorManWorkBatch workBatch, CancellationToken cancellationToken) : base(blobUri, workBatch, cancellationToken)
         {
         }
 
@@ -18,24 +19,49 @@ namespace Api.BlobExample
         {
             var storageAccount = CloudStorageAccount.Parse(
                 ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
-
-            var blobClient = storageAccount.CreateCloudBlobClient();
-            var blockBlob = blobClient.GetBlobReferenceFromServer(new Uri(Id));
-
-            using (var fileStream = System.IO.File.OpenWrite(@"path\myfile"))
-            {
-                blockBlob.DownloadToStream(fileStream);
-            }
+            var blockBlob = GetBlobReference(storageAccount, Id);
+            DownloadBlobFile(blockBlob);
         }
+
 
         protected override void DoAlwaysErrorCallback(Exception exception, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            throw exception;
         }
 
         protected override void DoFinally(CancellationToken cancellationToken)
         {
             Debug.WriteLine("Job Done!");
+        }
+
+        private static ICloudBlob GetBlobReference(CloudStorageAccount storageAccount, string uri)
+        {
+            var blobClient = storageAccount.CreateCloudBlobClient();
+            var blockBlob = blobClient.GetBlobReferenceFromServer(new Uri(uri));
+
+            return blockBlob;
+        }
+
+        private static void DownloadBlobFile(ICloudBlob blockBlob)
+        {
+            var path = GetAndCreateFullPath(Path.GetDirectoryName(blockBlob.Name));
+
+            var fileName = Path.GetFileName(blockBlob.Name);
+            if (fileName != null)
+                blockBlob.DownloadToFile(Path.Combine(path, fileName), FileMode.OpenOrCreate);
+        }
+
+        private static string GetAndCreateFullPath(string relPath)
+        {
+            if (!Directory.Exists("tmp"))
+                Directory.CreateDirectory("tmp");
+
+            var path = string.IsNullOrEmpty(relPath) ? "tmp" : Path.Combine("tmp", relPath));
+
+            if (!string.IsNullOrEmpty(path) && !Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path;
         }
     }
 }

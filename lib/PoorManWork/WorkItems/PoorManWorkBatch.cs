@@ -4,13 +4,13 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class PoorManWorkBatchSynchronizer
+    public class PoorManWorkBatch
     {
         private int _workBatchSize;
 
         public ConcurrentBag<IPoorManWorkItem> FailedWorkItems { get; }
 
-        public PoorManWorkBatchSynchronizer(int workBatchSize)
+        public PoorManWorkBatch(int workBatchSize)
         {
             if (workBatchSize < 1)
             {

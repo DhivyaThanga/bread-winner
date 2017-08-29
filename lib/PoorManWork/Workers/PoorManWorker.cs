@@ -7,6 +7,8 @@ namespace PoorManWork
     {
         protected Thread WrappedThread { get; set; }
 
+        public bool IsAlive => WrappedThread.IsAlive;
+
         public void Start(CancellationToken cancellationToken)
         {
             if (cancellationToken != CancellationToken.None)

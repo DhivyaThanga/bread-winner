@@ -3,19 +3,19 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public abstract class PoorManSyncedWorkItem : IPoorManWorkItem
+    public abstract class PoorManBatchWorkItem : IPoorManWorkItem
     {
-        private readonly PoorManWorkBatchSynchronizer _workBatchSynchronizer;
+        private readonly PoorManWorkBatch _workBatch;
         private readonly CancellationToken _cancellationToken;
 
         public string Id { get; }
         public PoorManWorkItemStatus WorkItemStatus { get; private set; }
 
-        protected PoorManSyncedWorkItem(
-            string id, PoorManWorkBatchSynchronizer workBatchSynchronizer, CancellationToken cancellationToken)
+        protected PoorManBatchWorkItem(
+            string id, PoorManWorkBatch workBatch, CancellationToken cancellationToken)
         {
             Id = id;
-            _workBatchSynchronizer = workBatchSynchronizer;
+            _workBatch = workBatch;
             _cancellationToken = cancellationToken;
         }
 
@@ -32,7 +32,7 @@ namespace PoorManWork
                 DoAlwaysErrorCallback(exception, cancellationToken);
             }
 
-            if (_workBatchSynchronizer.WorkDone(this))
+            if (_workBatch.WorkDone(this))
             {
                 DoFinally(_cancellationToken);
             }
