@@ -36,7 +36,7 @@ namespace Api.BlobExample
             if(Directory.Exists("tmp"))
                 Directory.Delete("tmp", true);
 
-            Debug.WriteLine($"Producer: {fileLocations.Length} blobs found!");
+            CloudConsole.WriteLine($"Created batch {batch.Id} with {fileLocations.Length} blobs");
 
             return fileLocations
                 .Select(x => new ReadFromBlobWorkItem(x.AbsoluteUri, batch, cancellationToken))

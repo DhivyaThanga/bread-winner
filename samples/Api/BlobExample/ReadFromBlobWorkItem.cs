@@ -31,7 +31,7 @@ namespace Api.BlobExample
 
         protected override void DoFinally(CancellationToken cancellationToken)
         {
-            Debug.WriteLine("Job Done!");
+            CloudConsole.WriteLine($"Batch {BatchId} done");
         }
 
         private static ICloudBlob GetBlobReference(CloudStorageAccount storageAccount, string uri)
@@ -56,7 +56,7 @@ namespace Api.BlobExample
             if (!Directory.Exists("tmp"))
                 Directory.CreateDirectory("tmp");
 
-            var path = string.IsNullOrEmpty(relPath) ? "tmp" : Path.Combine("tmp", relPath));
+            var path = string.IsNullOrEmpty(relPath) ? "tmp" : Path.Combine("tmp", relPath);
 
             if (!string.IsNullOrEmpty(path) && !Directory.Exists(path))
                 Directory.CreateDirectory(path);

@@ -144,6 +144,7 @@
   <ItemGroup>
     <Compile Include="AppBuilderExtensions.cs" />
     <Compile Include="BoundedBufferStartup.cs" />
+    <Compile Include="BlobExample\CloudConsole.cs" />
     <Compile Include="Dependency\HttpClientStub.cs" />
     <Compile Include="Dependency\IHttpClient.cs" />
     <Compile Include="IoC\Extensions\AppBuilderWindsorExtensions.cs" />

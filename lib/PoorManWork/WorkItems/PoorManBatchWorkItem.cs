@@ -8,6 +8,7 @@ namespace PoorManWork
         private readonly PoorManWorkBatch _workBatch;
         private readonly CancellationToken _cancellationToken;
 
+        public string BatchId => _workBatch.Id;
         public string Id { get; }
         public PoorManWorkItemStatus WorkItemStatus { get; private set; }
 

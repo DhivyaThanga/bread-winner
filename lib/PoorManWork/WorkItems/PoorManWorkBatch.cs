@@ -7,10 +7,11 @@ namespace PoorManWork
     public class PoorManWorkBatch
     {
         private int _workBatchSize;
+        public string Id { get; }
 
         public ConcurrentBag<IPoorManWorkItem> FailedWorkItems { get; }
 
-        public PoorManWorkBatch(int workBatchSize)
+        public PoorManWorkBatch(int workBatchSize, string batchId = null)
         {
             if (workBatchSize < 1)
             {
@@ -19,6 +20,8 @@ namespace PoorManWork
 
             _workBatchSize = workBatchSize;
             FailedWorkItems = new ConcurrentBag<IPoorManWorkItem>();
+
+            Id = batchId ?? Guid.NewGuid().ToString();
         }
 
         public bool WorkDone(IPoorManWorkItem workItem)
