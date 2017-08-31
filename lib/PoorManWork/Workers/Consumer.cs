@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    internal class Consumer : Worker
+    public class Consumer : Worker
     {
         private readonly Func<CancellationToken, IWorkItem> _takeWork;
 

@@ -1,7 +1,6 @@
 using System.Threading;
 using Microsoft.Owin.BuilderProperties;
 using Owin;
-using PoorManWork;
 
 namespace Api
 {

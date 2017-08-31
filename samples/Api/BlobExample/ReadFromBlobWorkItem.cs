@@ -9,9 +9,9 @@ using PoorManWork;
 
 namespace Api.BlobExample
 {
-    public class ReadFromBlobWorkItem : PoorManBatchWorkItem
+    public class ReadFromBlobWorkItem : BatchWorkItem
     {
-        public ReadFromBlobWorkItem(string blobUri, PoorManWorkBatch workBatch, CancellationToken cancellationToken) : base(blobUri, workBatch, cancellationToken)
+        public ReadFromBlobWorkItem(string blobUri, WorkBatch workBatch, CancellationToken cancellationToken) : base(blobUri, workBatch, cancellationToken)
         {
         }
 

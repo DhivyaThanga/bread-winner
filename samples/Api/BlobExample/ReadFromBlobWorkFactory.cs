@@ -4,14 +4,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using PoorManWork;
 
 namespace Api.BlobExample
 {
-    public class ReadFromBlobWorkFactory : IPoorManWorkFactory
+    public class ReadFromBlobWorkFactory
     {
         private readonly Func<bool> _checkBoundedBufferStatusFunc;
         private readonly WorkAvailableRepo _workAvailableRepo;
@@ -22,7 +21,7 @@ namespace Api.BlobExample
             _workAvailableRepo = workAvailableRepo;
         }
 
-        public IPoorManWorkItem[] Create(CancellationToken cancellationToken)
+        public IWorkItem[] Create(CancellationToken cancellationToken)
         {
             if(_checkBoundedBufferStatusFunc()) Debug.WriteLine("Bounded buffer healthy");
             if (!_workAvailableRepo.IsWorkAvailable())
@@ -31,7 +30,7 @@ namespace Api.BlobExample
             }
 
             var fileLocations = GetAllFilesInBlob();
-            var batch = new PoorManWorkBatch(fileLocations.Length);
+            var batch = new WorkBatch(fileLocations.Length);
 
             if(Directory.Exists("tmp"))
                 Directory.Delete("tmp", true);
@@ -40,7 +39,7 @@ namespace Api.BlobExample
 
             return fileLocations
                 .Select(x => new ReadFromBlobWorkItem(x.AbsoluteUri, batch, cancellationToken))
-                .Cast<IPoorManWorkItem>()
+                .Cast<IWorkItem>()
                 .ToArray();
         }
 

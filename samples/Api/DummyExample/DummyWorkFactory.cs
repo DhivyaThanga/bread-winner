@@ -6,7 +6,7 @@ using PoorManWork;
 
 namespace Api
 {
-    public class DummyWorkFactory : IPoorManWorkFactory
+    public class DummyWorkFactory
     {
         private readonly WorkAvailableRepo _workAvailableRepo;
 
@@ -15,7 +15,7 @@ namespace Api
             _workAvailableRepo = workAvailableRepo;
         }
 
-        public IPoorManWorkItem[] Create(CancellationToken cancellationToken)
+        public IWorkItem[] Create(CancellationToken cancellationToken)
         {
             if (!_workAvailableRepo.IsWorkAvailable())
             {
@@ -28,7 +28,7 @@ namespace Api
             }
 
             var rand = new Random();
-            var synchronizer = new PoorManWorkBatch(3);
+            var synchronizer = new WorkBatch(3);
             var workItems = new[]
             {
                 new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
@@ -40,7 +40,7 @@ namespace Api
                 $"Producer {Thread.CurrentThread.ManagedThreadId} has created " +
                 $"{workItems[0].Id}, {workItems[1].Id}, {workItems[2].Id}");
 
-            return workItems.Cast<IPoorManWorkItem>().ToArray();
+            return workItems.Cast<IWorkItem>().ToArray();
         }
     }
 }

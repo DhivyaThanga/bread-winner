@@ -156,6 +156,7 @@
     <Compile Include="Extensions\HttpConfigurationExtensions.cs" />
     <Compile Include="BlobExample\ReadFromBlobWorkFactory.cs" />
     <Compile Include="BlobExample\ReadFromBlobWorkItem.cs" />
+    <Compile Include="ScheduledProducer.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="IoC\OwinWindsorDependencyScope.cs" />
     <Compile Include="IoC\WindsorHttpDependencyResolver.cs" />

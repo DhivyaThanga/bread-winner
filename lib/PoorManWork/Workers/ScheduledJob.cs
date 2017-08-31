@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    internal class ScheduledJob : Worker
+    public class ScheduledJob : Worker
     {
         private readonly TimeSpan _interval;
         private readonly Action<CancellationToken> _workItem;

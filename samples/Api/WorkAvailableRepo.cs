@@ -2,39 +2,20 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using PoorManWork;
 
 namespace Api
 {
     public class WorkAvailableRepo
     {
         private int _count;
-        private readonly TimeSpan _schedule;
         private readonly int _consecutiveAvailableBatches;
-        private Task _pulser;
+        public IWorker Job { get; }
 
-        public WorkAvailableRepo(TimeSpan schedule, int consecutiveAvailableBatches)
+
+        public WorkAvailableRepo(int consecutiveAvailableBatches)
         {
-            _schedule = schedule;
             _consecutiveAvailableBatches = consecutiveAvailableBatches;
-        }
-
-        public void Start(CancellationToken cancellationToken)
-        {
-            _pulser = new Task(() =>
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    Reset();
-                    cancellationToken.WaitHandle.WaitOne(_schedule);
-                }
-            }, cancellationToken, TaskCreationOptions.LongRunning);
-
-            if (cancellationToken != CancellationToken.None)
-            {
-                cancellationToken.Register(_pulser.Wait);
-            }
-
-            _pulser.Start();
         }
 
         public void Reset()
