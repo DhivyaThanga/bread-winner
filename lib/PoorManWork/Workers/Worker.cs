@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public abstract class PoorManWorker : IPoorManWorker
+    public abstract class Worker : IWorker
     {
         protected internal Action<CancellationToken> StartupAction;
 

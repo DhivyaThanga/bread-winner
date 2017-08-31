@@ -3,17 +3,17 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public abstract class PoorManBatchWorkItem : IPoorManWorkItem
+    public abstract class BatchWorkItem : IWorkItem
     {
-        private readonly PoorManWorkBatch _workBatch;
+        private readonly WorkBatch _workBatch;
         private readonly CancellationToken _cancellationToken;
 
         public string BatchId => _workBatch.Id;
         public string Id { get; }
-        public PoorManWorkItemStatus WorkItemStatus { get; private set; }
+        public WorkItemStatus WorkItemStatus { get; private set; }
 
-        protected PoorManBatchWorkItem(
-            string id, PoorManWorkBatch workBatch, CancellationToken cancellationToken)
+        protected BatchWorkItem(
+            string id, WorkBatch workBatch, CancellationToken cancellationToken)
         {
             Id = id;
             _workBatch = workBatch;
@@ -25,11 +25,11 @@ namespace PoorManWork
             try
             {
                 DoAlways(_cancellationToken);
-                WorkItemStatus = PoorManWorkItemStatus.Successful;
+                WorkItemStatus = WorkItemStatus.Successful;
             }
             catch (Exception exception)
             {
-                WorkItemStatus = PoorManWorkItemStatus.Failed;
+                WorkItemStatus = WorkItemStatus.Failed;
                 DoAlwaysErrorCallback(exception, cancellationToken);
             }
 

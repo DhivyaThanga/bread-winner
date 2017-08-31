@@ -4,11 +4,11 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public abstract class PoorManAbstractProducer : PoorManWorker
+    public abstract class AbstractProducer : Worker
     {
-        internal Action<IPoorManWorkItem[], CancellationToken> AddWork { get; set; }
+        internal Action<IWorkItem[], CancellationToken> AddWork { get; set; }
 
-        protected PoorManAbstractProducer()
+        protected AbstractProducer()
         {
             StartupAction = cancellatonToken =>
             {
@@ -30,11 +30,11 @@ namespace PoorManWork
         }
 
         protected abstract void Startup(
-            Action<IPoorManWorkItem[], CancellationToken> addWork,
+            Action<IWorkItem[], CancellationToken> addWork,
             CancellationToken cancellationToken);
 
         protected abstract void QueueWork(
-            Action<IPoorManWorkItem[], CancellationToken> addWork,
+            Action<IWorkItem[], CancellationToken> addWork,
             CancellationToken cancellationToken);
 
         /// <summary>

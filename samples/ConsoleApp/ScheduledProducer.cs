@@ -3,26 +3,26 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class ScheduledProducer : PoorManAbstractProducer
+    public class ScheduledProducer : AbstractProducer
     {
         private readonly TimeSpan _timespan;
-        private readonly Func<CancellationToken, IPoorManWorkItem[]> _workFactoryMethod;
+        private readonly Func<CancellationToken, IWorkItem[]> _workFactoryMethod;
 
         public ScheduledProducer(TimeSpan timespan,
-            Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
+            Func<CancellationToken, IWorkItem[]> workFactoryMethod)
         {
             _timespan = timespan;
             _workFactoryMethod = workFactoryMethod;
         }
 
         protected override void Startup(
-            Action<IPoorManWorkItem[], CancellationToken> addWork, CancellationToken cancellationToken)
+            Action<IWorkItem[], CancellationToken> addWork, CancellationToken cancellationToken)
         {
             QueueWork(addWork, cancellationToken);
         }
 
         protected override void QueueWork(
-            Action<IPoorManWorkItem[], CancellationToken> addWork, 
+            Action<IWorkItem[], CancellationToken> addWork, 
             CancellationToken cancellationToken)
         {
             Console.WriteLine("Producer running...");

@@ -5,21 +5,21 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class PoorManWorkerPool : IPoorManWorker
+    public class WorkerPool : IWorkerPool
     {
-        private readonly List<IPoorManWorker> _workers;
+        private readonly List<IWorker> _workers;
         private volatile bool _isStarted = false;
 
         public bool IsAlive {
             get { return _workers.Select(x => !x.IsAlive).Any(); }
         }
 
-        public PoorManWorkerPool()
+        internal WorkerPool()
         {
-            _workers = new List<IPoorManWorker>();
+            _workers = new List<IWorker>();
         }
 
-        public void Add(params IPoorManWorker[] workers)
+        public void Add(params IWorker[] workers)
         {
             _workers.AddRange(workers);
         }

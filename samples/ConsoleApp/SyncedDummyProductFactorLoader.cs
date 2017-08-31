@@ -8,7 +8,7 @@ namespace ConsoleApp
 {
     public class SyncedDummyProductFactorLoader : AbstractProductFactorLoader
     {
-        protected override IPoorManWorkItem[] WorkBatchFactoryMethod(CancellationToken cancellationToken)
+        protected override IWorkItem[] WorkBatchFactoryMethod(CancellationToken cancellationToken)
         {
             if (Count > 1)
             {
@@ -23,7 +23,7 @@ namespace ConsoleApp
             }
 
             var rand = new Random();
-            var synchronizer = new PoorManWorkBatch(3);
+            var synchronizer = new WorkBatch(3);
             var workItems = new [] {
                 new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
                 new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
@@ -33,7 +33,7 @@ namespace ConsoleApp
                 $"Producer {Thread.CurrentThread.ManagedThreadId} has created " +
                 $"{workItems[0].Id}, {workItems[1].Id}, {workItems[2].Id}");
 
-            return workItems.Cast<IPoorManWorkItem>().ToArray();
+            return workItems.Cast<IWorkItem>().ToArray();
         }
     }
 }

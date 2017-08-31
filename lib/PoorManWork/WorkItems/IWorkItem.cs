@@ -3,12 +3,12 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public interface IPoorManWorkItem
+    public interface IWorkItem
     {
         string Id { get; }
 
         void Do(CancellationToken cancellationToken);
 
-        PoorManWorkItemStatus WorkItemStatus { get; }
+        WorkItemStatus WorkItemStatus { get; }
     }
 }

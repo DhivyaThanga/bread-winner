@@ -4,11 +4,11 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    internal class PoorManConsumer : PoorManWorker
+    internal class Consumer : Worker
     {
-        private readonly Func<CancellationToken, IPoorManWorkItem> _takeWork;
+        private readonly Func<CancellationToken, IWorkItem> _takeWork;
 
-        internal PoorManConsumer(Func<CancellationToken, IPoorManWorkItem> takeWork)
+        internal Consumer(Func<CancellationToken, IWorkItem> takeWork)
         {
             _takeWork = takeWork;
         }

@@ -4,14 +4,14 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class PoorManWorkBatch
+    public class WorkBatch
     {
         private int _workBatchSize;
         public string Id { get; }
 
-        public ConcurrentBag<IPoorManWorkItem> CompletedWorkItems { get; }
+        public ConcurrentBag<IWorkItem> CompletedWorkItems { get; }
 
-        public PoorManWorkBatch(int workBatchSize, string batchId = null)
+        public WorkBatch(int workBatchSize, string batchId = null)
         {
             if (workBatchSize < 1)
             {
@@ -19,12 +19,12 @@ namespace PoorManWork
             }
 
             _workBatchSize = workBatchSize;
-            CompletedWorkItems = new ConcurrentBag<IPoorManWorkItem>();
+            CompletedWorkItems = new ConcurrentBag<IWorkItem>();
 
             Id = batchId ?? Guid.NewGuid().ToString();
         }
 
-        public bool WorkDone(IPoorManWorkItem workItem)
+        public bool WorkDone(IWorkItem workItem)
         {
             if (_workBatchSize <= 0)
             {

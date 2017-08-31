@@ -5,13 +5,15 @@ namespace PoorManWork
 {
     public interface IWorkerFactory
     {
-        IPoorManWorker CreateScheduledJob(
+        IWorkerPool CreatePool();
+
+        IWorker CreateScheduledJob(
             TimeSpan interval, 
             Action<CancellationToken> workItem,
             Action<CancellationToken> startupAction = null);
 
-        IPoorManWorker[] CreateConsumers(int n);
+        IWorker[] CreateConsumers(int n);
 
-        IPoorManWorker CreateProducer(Func<PoorManAbstractProducer> factoryMethod);
+        IWorker CreateProducer(Func<AbstractProducer> factoryMethod);
     }
 }

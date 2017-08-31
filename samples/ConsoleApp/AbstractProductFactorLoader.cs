@@ -6,7 +6,7 @@ namespace ConsoleApp
 {
     public abstract class AbstractProductFactorLoader : IDisposable
     {
-        private readonly PoorManWorkerPool _workerPool;
+        private readonly IWorkerPool _workerPool;
         protected static int Count = 2;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
@@ -15,7 +15,7 @@ namespace ConsoleApp
             _cancellationTokenSource = new CancellationTokenSource();
 
             var factory = new WorkerFactory();
-            _workerPool = new PoorManWorkerPool();
+            _workerPool = factory.CreatePool();
 
             _workerPool.Add(
                 factory.CreateScheduledJob(
@@ -44,6 +44,6 @@ namespace ConsoleApp
             _workerPool.Start(_cancellationTokenSource.Token);
         }
 
-        protected abstract IPoorManWorkItem[] WorkBatchFactoryMethod(CancellationToken cancellationToken);
+        protected abstract IWorkItem[] WorkBatchFactoryMethod(CancellationToken cancellationToken);
     }
 }

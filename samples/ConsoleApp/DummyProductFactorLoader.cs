@@ -8,7 +8,7 @@ namespace ConsoleApp
 {
     public class DummyProductFactorLoader : AbstractProductFactorLoader
     {
-        protected override IPoorManWorkItem[] WorkBatchFactoryMethod(CancellationToken cancellationToken)
+        protected override IWorkItem[] WorkBatchFactoryMethod(CancellationToken cancellationToken)
         {
             if (Count > 1)
             {
@@ -32,7 +32,7 @@ namespace ConsoleApp
                 $"Producer {Thread.CurrentThread.ManagedThreadId} has created " +
                 $"{workItems[0].Id}, {workItems[1].Id}, {workItems[2].Id}");
 
-            return workItems.Cast<IPoorManWorkItem>().ToArray();
+            return workItems.Cast<IWorkItem>().ToArray();
         }
     }
 }

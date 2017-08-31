@@ -1,6 +1,6 @@
 namespace PoorManWork
 {
-    public enum PoorManWorkItemStatus
+    public enum WorkItemStatus
     {
         Scheduled,
         Successful,

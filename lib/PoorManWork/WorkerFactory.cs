@@ -7,15 +7,15 @@ namespace PoorManWork
 {
     public class WorkerFactory : IWorkerFactory
     {
-        private readonly BlockingCollection<IPoorManWorkItem> _workQueue;
+        private readonly BlockingCollection<IWorkItem> _workQueue;
 
         public WorkerFactory()
         {
-            _workQueue = new BlockingCollection<IPoorManWorkItem>();
+            _workQueue = new BlockingCollection<IWorkItem>();
         }
 
-        public IPoorManWorker CreateProducer(
-            Func<PoorManAbstractProducer> factoryMethod)
+        public IWorker CreateProducer(
+            Func<AbstractProducer> factoryMethod)
         {
             var producer = factoryMethod();
             producer.AddWork = AddWork;
@@ -23,7 +23,12 @@ namespace PoorManWork
             return producer;
         }
 
-        public IPoorManWorker CreateScheduledJob(
+        public IWorkerPool CreatePool()
+        {
+            return new WorkerPool();
+        }
+
+        public IWorker CreateScheduledJob(
             TimeSpan interval,
             Action<CancellationToken> workItem, 
             Action<CancellationToken> startupAction = null)
@@ -31,18 +36,18 @@ namespace PoorManWork
             return new ScheduledJob(interval, workItem, startupAction);
         }
 
-        public IPoorManWorker[] CreateConsumers(int n)
+        public IWorker[] CreateConsumers(int n)
         {
-            var consumers = new List<IPoorManWorker>();
+            var consumers = new List<IWorker>();
             for (var i = 0; i < n; i++)
             {
-                consumers.Add(new PoorManConsumer(TakeWork));
+                consumers.Add(new Consumer(TakeWork));
             }
 
             return consumers.ToArray();
         }
 
-        private void AddWork(IPoorManWorkItem[] workBatch, CancellationToken cancellationToken)
+        private void AddWork(IWorkItem[] workBatch, CancellationToken cancellationToken)
         {
             foreach (var workItem in workBatch)
             {
@@ -50,7 +55,7 @@ namespace PoorManWork
             }
         }
 
-        private IPoorManWorkItem TakeWork(CancellationToken cancellationToken)
+        private IWorkItem TakeWork(CancellationToken cancellationToken)
         {
             return _workQueue.Take(cancellationToken);
         }

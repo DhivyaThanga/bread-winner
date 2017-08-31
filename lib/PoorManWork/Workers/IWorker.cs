@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 
 namespace PoorManWork
 {
-    public interface IPoorManWorker
+    public interface IWorker
     {
         void Start(CancellationToken cancellationToken);
 

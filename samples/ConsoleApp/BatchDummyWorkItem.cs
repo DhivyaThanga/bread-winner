@@ -4,10 +4,10 @@ using PoorManWork;
 
 namespace ConsoleApp
 {
-    public class BatchDummyWorkItem : PoorManBatchWorkItem
+    public class BatchDummyWorkItem : BatchWorkItem
     {
         public BatchDummyWorkItem(
-            int id, PoorManWorkBatch workBatch, CancellationToken cancellationToken) 
+            int id, WorkBatch workBatch, CancellationToken cancellationToken) 
             : base(id.ToString(), workBatch, cancellationToken)
         {
         }
