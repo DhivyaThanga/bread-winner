@@ -43,17 +43,16 @@
     <Compile Include="Workers\IPoorManWorker.cs" />
     <Compile Include="Workers\PoorManAbstractProducer.cs" />
     <Compile Include="WorkItems\IPoorManWorkItem.cs" />
-    <Compile Include="IPoorManManager.cs" />
+    <Compile Include="IWorkerFactory.cs" />
     <Compile Include="Workers\PoorManConsumer.cs" />
-    <Compile Include="Workers\PoorManPulser.cs" />
+    <Compile Include="Workers\ScheduledJob.cs" />
     <Compile Include="WorkItems\PoorManWorkBatch.cs" />
     <Compile Include="Workers\PoorManWorkerPool.cs" />
     <Compile Include="Workers\PoorManWorker.cs" />
     <Compile Include="WorkItems\PoorManBatchWorkItem.cs" />
-    <Compile Include="PoorManBoundedBuffer.cs" />
+    <Compile Include="WorkerFactory.cs" />
     <Compile Include="WorkItems\PoorManWorkItemStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScheduledSingleProducerBoundedBuffer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Threading;
 
 namespace PoorManWork
@@ -6,6 +7,14 @@ namespace PoorManWork
     public abstract class PoorManAbstractProducer : PoorManWorker
     {
         internal Action<IPoorManWorkItem[], CancellationToken> AddWork { get; set; }
+
+        protected PoorManAbstractProducer()
+        {
+            StartupAction = cancellatonToken =>
+            {
+                Startup(AddWork, cancellatonToken);
+            };
+        }
 
         protected sealed override void Loop(CancellationToken cancellationToken)
         {
@@ -19,6 +28,10 @@ namespace PoorManWork
                 QueueWork(AddWork, cancellationToken);
             }
         }
+
+        protected abstract void Startup(
+            Action<IPoorManWorkItem[], CancellationToken> addWork,
+            CancellationToken cancellationToken);
 
         protected abstract void QueueWork(
             Action<IPoorManWorkItem[], CancellationToken> addWork,

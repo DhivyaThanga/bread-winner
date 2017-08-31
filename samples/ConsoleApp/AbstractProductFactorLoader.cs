@@ -6,26 +6,32 @@ namespace ConsoleApp
 {
     public abstract class AbstractProductFactorLoader : IDisposable
     {
-        private readonly IPoorManManager _poorManBoundedBuffer;
-        protected static int Count;
-        private readonly PoorManPulser _workEmitter;
+        private readonly PoorManWorkerPool _workerPool;
+        protected static int Count = 2;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
         protected AbstractProductFactorLoader()
         {
             _cancellationTokenSource = new CancellationTokenSource();
 
-            _workEmitter = new PoorManPulser(
-                new TimeSpan(days:0, hours:0, minutes:0, seconds:10), 
-                () =>
-                {
-                    Console.WriteLine("Dummy Pulser: hearthbeat...");
-                    Interlocked.Exchange(ref Count, 0);
-                });
+            var factory = new WorkerFactory();
+            _workerPool = new PoorManWorkerPool();
 
-            _poorManBoundedBuffer = new PoorManBoundedBuffer();
-            _poorManBoundedBuffer.AddConsumers(2);
-            _poorManBoundedBuffer.AddProducer(_workEmitter, WorkBatchFactoryMethod);
+            _workerPool.Add(
+                factory.CreateScheduledJob(
+                new TimeSpan(days: 0, hours: 0, minutes: 0, seconds: 15),
+                cancellationToken =>
+                {
+                    Console.WriteLine("Work arrived!");
+                    Interlocked.Exchange(ref Count, 0);
+                }));
+
+            _workerPool.Add(factory.CreateProducer(
+                () => new ScheduledProducer(
+                    new TimeSpan(days: 0, hours: 0, minutes: 0, seconds: 10), 
+                    WorkBatchFactoryMethod)));
+
+            _workerPool.Add(factory.CreateConsumers(2));
         }
 
         public void Dispose()
@@ -35,8 +41,7 @@ namespace ConsoleApp
 
         public void Start()
         {
-            _poorManBoundedBuffer.Start(_cancellationTokenSource.Token);
-            _workEmitter.Start(_cancellationTokenSource.Token);
+            _workerPool.Start(_cancellationTokenSource.Token);
         }
 
         protected abstract IPoorManWorkItem[] WorkBatchFactoryMethod(CancellationToken cancellationToken);

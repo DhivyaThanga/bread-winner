@@ -3,27 +3,27 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class PoorManPulser : PoorManWorker
+    internal class ScheduledJob : PoorManWorker
     {
         private readonly TimeSpan _interval;
-        private readonly Action _updateStateAction;
+        private readonly Action<CancellationToken> _workItem;
 
-        internal EventWaitHandle WorkArrived { get; }
-
-        public PoorManPulser(TimeSpan interval,  Action updateStateAction)
+        internal ScheduledJob(
+            TimeSpan interval, 
+            Action<CancellationToken> workItem, 
+            Action<CancellationToken> startupAction)
         {
             _interval = interval;
-            _updateStateAction = updateStateAction;
-            WorkArrived = new AutoResetEvent(false);
+            _workItem = workItem;
+            StartupAction = startupAction;
         }
 
         protected override void Loop(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                _updateStateAction?.Invoke();
-                WorkArrived.Set();
                 cancellationToken.WaitHandle.WaitOne(_interval);
+                _workItem?.Invoke(cancellationToken);
             }
         }
     }

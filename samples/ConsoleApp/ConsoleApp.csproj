@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractProductFactorLoader.cs" />
-    <Compile Include="BasicProducer.cs" />
+    <Compile Include="ScheduledProducer.cs" />
     <Compile Include="SyncedDummyProductFactorLoader.cs" />
     <Compile Include="BatchDummyWorkItem.cs" />
     <Compile Include="DummyProductFactorLoader.cs" />

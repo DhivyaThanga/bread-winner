@@ -5,11 +5,14 @@ namespace PoorManWork
 {
     public abstract class PoorManWorker : IPoorManWorker
     {
+        protected internal Action<CancellationToken> StartupAction;
+
         protected Thread WrappedThread { get; set; }
 
         public bool IsAlive => WrappedThread.IsAlive;
 
-        public void Start(CancellationToken cancellationToken)
+        public void Start(
+            CancellationToken cancellationToken)
         {
             if (cancellationToken != CancellationToken.None)
             {
@@ -24,12 +27,14 @@ namespace PoorManWork
             WrappedThread.Start();
         }
 
-        private ThreadStart GetThreadAction(CancellationToken cancellationToken)
+        private ThreadStart GetThreadAction(
+            CancellationToken cancellationToken)
         {
             return () =>
             {
                 try
                 {
+                    StartupAction?.Invoke(cancellationToken);
                     Loop(cancellationToken);
                 }
                 catch (OperationCanceledException)

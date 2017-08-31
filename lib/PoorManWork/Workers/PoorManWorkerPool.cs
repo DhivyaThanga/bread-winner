@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    internal class PoorManWorkerPool : IPoorManWorker
+    public class PoorManWorkerPool : IPoorManWorker
     {
         private readonly List<IPoorManWorker> _workers;
         private volatile bool _isStarted = false;

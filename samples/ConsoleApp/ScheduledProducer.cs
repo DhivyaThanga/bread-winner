@@ -3,20 +3,30 @@ using System.Threading;
 
 namespace PoorManWork
 {
-    public class BasicProducer : PoorManAbstractProducer
+    public class ScheduledProducer : PoorManAbstractProducer
     {
         private readonly TimeSpan _timespan;
-        private Func<CancellationToken, IPoorManWorkItem[]> _workFactoryMethod;
+        private readonly Func<CancellationToken, IPoorManWorkItem[]> _workFactoryMethod;
 
-        public BasicProducer(TimeSpan timespan)
+        public ScheduledProducer(TimeSpan timespan,
+            Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
         {
             _timespan = timespan;
+            _workFactoryMethod = workFactoryMethod;
+        }
+
+        protected override void Startup(
+            Action<IPoorManWorkItem[], CancellationToken> addWork, CancellationToken cancellationToken)
+        {
+            QueueWork(addWork, cancellationToken);
         }
 
         protected override void QueueWork(
             Action<IPoorManWorkItem[], CancellationToken> addWork, 
             CancellationToken cancellationToken)
         {
+            Console.WriteLine("Producer running...");
+
             while (true)
             {
                 var workBatch = _workFactoryMethod(cancellationToken);
@@ -25,6 +35,8 @@ namespace PoorManWork
                 {
                     break;
                 }
+
+                addWork(workBatch, cancellationToken);
             }
         }
 
