@@ -40,7 +40,7 @@ namespace PoorManWork
             }
         }
 
-        protected override bool WaitForWork(CancellationToken cancellationToken)
+        protected override bool WaitForWorkOrCancellation(CancellationToken cancellationToken)
         {
             return cancellationToken.WaitHandle.WaitOne(_timespan);
         }

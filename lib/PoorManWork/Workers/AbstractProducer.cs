@@ -20,7 +20,7 @@ namespace PoorManWork
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                if (WaitForWork(cancellationToken))
+                if (WaitForWorkOrCancellation(cancellationToken))
                 {
                     break;
                 }
@@ -42,6 +42,6 @@ namespace PoorManWork
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns>true if cancellation was requested</returns>
-        protected abstract bool WaitForWork(CancellationToken cancellationToken);
+        protected abstract bool WaitForWorkOrCancellation(CancellationToken cancellationToken);
     }
 }
