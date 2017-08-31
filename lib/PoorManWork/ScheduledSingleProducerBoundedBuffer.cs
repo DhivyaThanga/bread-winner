@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 
 namespace PoorManWork
@@ -14,20 +13,13 @@ namespace PoorManWork
         public ScheduledSingleProducerBoundedBuffer(
             PoorManPulser pulser,
             int consumers,
-            Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
+            PoorManAbstractProducer producer)
         {
             _workEmitter = pulser;
             _poorManBoundedBuffer = new PoorManBoundedBuffer();
             _poorManBoundedBuffer.AddConsumers(consumers);
-            _poorManBoundedBuffer.AddProducer(_workEmitter, workFactoryMethod);
-        }
 
-        public ScheduledSingleProducerBoundedBuffer(
-            PoorManPulser pulser,
-            int consumers,
-            IPoorManWorkFactory workFactory)
-            : this(pulser, consumers, workFactory.Create)
-        {
+            _poorManBoundedBuffer.AddProducer(producer);
         }
 
         /// <summary>

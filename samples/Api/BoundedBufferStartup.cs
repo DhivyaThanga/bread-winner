@@ -20,7 +20,8 @@ namespace Api
             var pulser = new PoorManPulser(new TimeSpan(0, 0, 0, 10),
                 () => { Debug.WriteLine("Dummy Pulser: hearthbeat..."); });
 
-            _boundedBuffer = new ScheduledSingleProducerBoundedBuffer(pulser, 100, workFactory.Create);
+            _boundedBuffer =
+                new ScheduledSingleProducerBoundedBuffer(pulser, 100, workFactory);
             _boundedBuffer.Start(cancellationToken);
             workAvailableRepo.Start(appBuilder.GetOnAppDisposing());
         }

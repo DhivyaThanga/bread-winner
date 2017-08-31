@@ -17,17 +17,10 @@ namespace PoorManWork
             _workQueue = new BlockingCollection<IPoorManWorkItem>();
         }
 
-        public void AddProducer(
-            EventWaitHandle workArrived,
-            Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
+        public void AddProducer(PoorManAbstractProducer producer)
         {
-            _workerPool.Add(
-                new PoorManProducer(workArrived, AddWork, workFactoryMethod));
-        }
-
-        public void AddProducer(PoorManPulser pulser, Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod)
-        {
-            AddProducer(pulser.WorkArrived, workFactoryMethod);
+            producer.AddWork = AddWork;
+            _workerPool.Add(producer);
         }
 
         public void AddConsumers(int n)

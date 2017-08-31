@@ -10,7 +10,7 @@ namespace PoorManWork
 
         internal EventWaitHandle WorkArrived { get; }
 
-        public PoorManPulser(TimeSpan interval,  Action updateStateAction = null)
+        public PoorManPulser(TimeSpan interval,  Action updateStateAction)
         {
             _interval = interval;
             _updateStateAction = updateStateAction;

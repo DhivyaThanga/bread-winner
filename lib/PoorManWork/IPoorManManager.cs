@@ -7,8 +7,6 @@ namespace PoorManWork
     {
         void AddConsumers(int n);
 
-        void AddProducer(EventWaitHandle workArrived, Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod);
-
-        void AddProducer(PoorManPulser pulser, Func<CancellationToken, IPoorManWorkItem[]> workFactoryMethod);
+        void AddProducer(PoorManAbstractProducer producer);
     }
 }

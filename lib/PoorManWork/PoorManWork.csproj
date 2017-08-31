@@ -41,14 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Workers\IPoorManWorker.cs" />
-    <Compile Include="WorkItems\IPoorManWorkFactory.cs" />
+    <Compile Include="Workers\PoorManAbstractProducer.cs" />
     <Compile Include="WorkItems\IPoorManWorkItem.cs" />
     <Compile Include="IPoorManManager.cs" />
     <Compile Include="Workers\PoorManConsumer.cs" />
     <Compile Include="Workers\PoorManPulser.cs" />
     <Compile Include="WorkItems\PoorManWorkBatch.cs" />
     <Compile Include="Workers\PoorManWorkerPool.cs" />
-    <Compile Include="Workers\PoorManProducer.cs" />
     <Compile Include="Workers\PoorManWorker.cs" />
     <Compile Include="WorkItems\PoorManBatchWorkItem.cs" />
     <Compile Include="PoorManBoundedBuffer.cs" />
