@@ -25,7 +25,7 @@ namespace PoorManWork
             try
             {
                 DoAlways(_cancellationToken);
-                WorkItemStatus = PoorManWorkItemStatus.Completed;
+                WorkItemStatus = PoorManWorkItemStatus.Successful;
             }
             catch (Exception exception)
             {

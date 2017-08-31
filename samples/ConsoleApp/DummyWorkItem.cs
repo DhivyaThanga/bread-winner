@@ -23,7 +23,7 @@ namespace ConsoleApp
             {
                 Console.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId} consuming {Id}");
                 cancellationToken.WaitHandle.WaitOne(2000);
-                WorkItemStatus = PoorManWorkItemStatus.Completed;
+                WorkItemStatus = PoorManWorkItemStatus.Successful;
             }
             catch (Exception)
             {

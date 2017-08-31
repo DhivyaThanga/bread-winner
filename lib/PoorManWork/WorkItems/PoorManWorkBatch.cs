@@ -9,7 +9,7 @@ namespace PoorManWork
         private int _workBatchSize;
         public string Id { get; }
 
-        public ConcurrentBag<IPoorManWorkItem> FailedWorkItems { get; }
+        public ConcurrentBag<IPoorManWorkItem> CompletedWorkItems { get; }
 
         public PoorManWorkBatch(int workBatchSize, string batchId = null)
         {
@@ -19,18 +19,20 @@ namespace PoorManWork
             }
 
             _workBatchSize = workBatchSize;
-            FailedWorkItems = new ConcurrentBag<IPoorManWorkItem>();
+            CompletedWorkItems = new ConcurrentBag<IPoorManWorkItem>();
 
             Id = batchId ?? Guid.NewGuid().ToString();
         }
 
         public bool WorkDone(IPoorManWorkItem workItem)
         {
-            Interlocked.Decrement(ref _workBatchSize);
-            if (workItem.WorkItemStatus == PoorManWorkItemStatus.Failed)
+            if (_workBatchSize <= 0)
             {
-                FailedWorkItems.Add(workItem);
+                throw new ApplicationException("Batch completed");
             }
+
+            Interlocked.Decrement(ref _workBatchSize);
+            CompletedWorkItems.Add(workItem);
 
             return _workBatchSize == 0;
         }

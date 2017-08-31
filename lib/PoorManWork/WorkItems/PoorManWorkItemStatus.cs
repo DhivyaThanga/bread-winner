@@ -3,7 +3,7 @@ namespace PoorManWork
     public enum PoorManWorkItemStatus
     {
         Scheduled,
-        Completed,
+        Successful,
         Failed
     }
 }
