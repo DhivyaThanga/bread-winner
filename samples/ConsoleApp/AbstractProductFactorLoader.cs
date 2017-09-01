@@ -1,6 +1,6 @@
 using System;
 using System.Threading;
-using PoorManWork;
+using BreadWinner;
 
 namespace ConsoleApp
 {

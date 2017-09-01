@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using BreadWinner;
 
-namespace ConsoleApp
+namespace WebApi
 {
     public class ScheduledProducer : AbstractProducer
     {

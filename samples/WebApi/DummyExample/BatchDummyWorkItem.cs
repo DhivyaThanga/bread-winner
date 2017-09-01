@@ -1,8 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using BreadWinner;
 
-namespace ConsoleApp
+namespace WebApi.DummyExample
 {
     public class BatchDummyWorkItem : BatchWorkItem
     {
@@ -14,7 +15,8 @@ namespace ConsoleApp
 
         protected override void DoAlways(CancellationToken cancellationToken)
         {
-            Console.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId} consuming {Id}");
+            Debug.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId} consuming {Id}");
+
             cancellationToken.WaitHandle.WaitOne(2000);
         }
 
@@ -25,7 +27,7 @@ namespace ConsoleApp
 
         protected override void DoFinally(CancellationToken cancellationToken)
         {
-            Console.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId}, consuming {Id}, LAST OF THE BATCH");
+            Debug.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId} consuming {Id}, LAST OF THE BATCH");
         }
     }
 }

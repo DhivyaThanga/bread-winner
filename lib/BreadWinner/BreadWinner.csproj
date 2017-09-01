@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6EC93D0A-25C5-48FE-9A87-09F16E580D1D}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{099C7291-7FE4-4AAE-8325-DE8486BB731A}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleApp</RootNamespace>
-    <AssemblyName>ConsoleApp</AssemblyName>
+    <RootNamespace>BreadWinner</RootNamespace>
+    <AssemblyName>BreadWinner</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,23 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractProductFactorLoader.cs" />
-    <Compile Include="ScheduledProducer.cs" />
-    <Compile Include="SyncedDummyProductFactorLoader.cs" />
-    <Compile Include="BatchDummyWorkItem.cs" />
-    <Compile Include="DummyProductFactorLoader.cs" />
-    <Compile Include="DummyWorkItem.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Workers\IWorker.cs" />
+    <Compile Include="Workers\AbstractProducer.cs" />
+    <Compile Include="Workers\IWorkerPool.cs" />
+    <Compile Include="WorkItems\IWorkItem.cs" />
+    <Compile Include="IWorkerFactory.cs" />
+    <Compile Include="Workers\Consumer.cs" />
+    <Compile Include="Workers\ScheduledJob.cs" />
+    <Compile Include="WorkItems\WorkBatch.cs" />
+    <Compile Include="Workers\WorkerPool.cs" />
+    <Compile Include="Workers\Worker.cs" />
+    <Compile Include="WorkItems\BatchWorkItem.cs" />
+    <Compile Include="WorkerFactory.cs" />
+    <Compile Include="WorkItems\WorkItemStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\lib\BreadWinner\BreadWinner.csproj">
-      <Project>{099C7291-7FE4-4AAE-8325-DE8486BB731A}</Project>
-      <Name>BreadWinner</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

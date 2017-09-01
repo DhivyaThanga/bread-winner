@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using PoorManWork;
+using BreadWinner;
 
 namespace ConsoleApp
 {
