@@ -11,5 +11,5 @@ Every worker instance uses it's own thread, therefore use with caution at your o
 
 To install, you can use the related nuget package.
 ```powershell
-Install-Package BreadWinner -Version 0.4.0
+Install-Package BreadWinner -Version 0.5.0
 ```
