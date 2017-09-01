@@ -1,6 +1,7 @@
 using System;
 using BreadWinner;
 using SamplesShared.BlobExample;
+using SamplesShared.DummyExample;
 
 namespace SamplesShared
 {
@@ -13,17 +14,17 @@ namespace SamplesShared
             var factory = new WorkerFactory();
             var workerPool = factory.CreatePool();
 
-            var workAvailableRepo = new WorkAvailableRepo(1);
+            var workAvailableRepo = new WorkAvailableRepo(2);
             workerPool.Add(
                 factory.CreateScheduledJob(
                     workArrivedSchedule, token => { workAvailableRepo.Reset(); }));
 
-            var workFactory = new ReadFromBlobWorkFactory(
-                () => workerPool.IsAlive, workAvailableRepo);
+            var workFactory = new DummyWorkFactory(workAvailableRepo);
             workerPool.Add(factory.CreateProducer(
                 () => new ScheduledProducer(
                     producerCheckSchedule,
-                    workFactory.Create)));
+                    workFactory.Create,
+                    workFactory.Startup)));
 
             workerPool.Add(factory.CreateConsumers(consumers));
 

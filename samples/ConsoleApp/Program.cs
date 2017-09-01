@@ -18,11 +18,11 @@ namespace ConsoleApp
             var tokenSource = new CancellationTokenSource();
             pool.Start(tokenSource.Token);
 
-            Console.ReadKey();
-            
-            tokenSource.Cancel(false);
+            while (Console.ReadKey().KeyChar != 'q')
+            {
+            }
 
-            Console.ReadKey();
+            tokenSource.Cancel();
         }
     }
 }

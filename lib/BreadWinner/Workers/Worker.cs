@@ -20,6 +20,8 @@ namespace BreadWinner
                 cancellationToken.Register(Stop);
             }
 
+            StartupAction?.Invoke(cancellationToken);
+
             WrappedThread = new Thread(GetThreadAction(cancellationToken))
             {
                 IsBackground = true
@@ -50,7 +52,6 @@ namespace BreadWinner
             {
                 try
                 {
-                    StartupAction?.Invoke(cancellationToken);
                     Loop(cancellationToken);
                 }
                 catch (OperationCanceledException)

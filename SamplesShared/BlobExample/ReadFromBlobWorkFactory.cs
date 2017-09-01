@@ -22,45 +22,67 @@ namespace SamplesShared.BlobExample
             _workAvailableRepo = workAvailableRepo;
         }
 
+        public IWorkItem[] Startup(CancellationToken cancellationToken)
+        {
+            Debug.WriteLine("Bounded buffer starting");
+            var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
+            return GetWorkItems(path, "tmp/startup", cancellationToken);
+        }
+
         public IWorkItem[] Create(CancellationToken cancellationToken)
         {
-            if(_checkBoundedBufferStatusFunc()) Debug.WriteLine("Bounded buffer healthy");
+            if (_checkBoundedBufferStatusFunc()) Debug.WriteLine("Bounded buffer healthy");
+            var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
             if (!_workAvailableRepo.IsWorkAvailable())
             {
                 return null;
             }
 
-            var fileLocations = GetAllFilesWithPatternInBlob(".*part.*");
+            return GetWorkItems(path, "tmp/any", cancellationToken);
+        }
+
+        private IWorkItem[] GetWorkItems(string sourcePath, string destPath,  CancellationToken cancellationToken)
+        {
+            var fileLocations = GetAllFilesWithPatternInBlob(sourcePath, ".*part.*");
             var batch = new WorkBatch(fileLocations.Length);
 
-            if(Directory.Exists("tmp"))
-                Directory.Delete("tmp", true);
+            if (Directory.Exists(destPath))
+                Directory.Delete(destPath, true);
 
             CloudConsole.WriteLine($"Created batch {batch.Id} with {fileLocations.Length} blobs");
 
             return fileLocations
-                .Select(x => new ReadFromBlobWorkItem(x.AbsoluteUri, batch, cancellationToken))
+                .Select(x => new ReadFromBlobWorkItem(x.AbsoluteUri, destPath, batch, cancellationToken))
                 .Cast<IWorkItem>()
                 .ToArray();
         }
 
-        private static Uri[] GetAllFilesWithPatternInBlob(string pattern)
+        private static Uri[] GetAllFilesWithPatternInBlob(string path, string pattern)
         {
-            var storageAccount = CloudStorageAccount.Parse(
-                ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
-            var containerName = ConfigurationManager.AppSettings["Azure.Storage.Container"];
-            var blobClient = storageAccount.CreateCloudBlobClient();
-            var container = blobClient.GetContainerReference(containerName);
-            var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
-            var blobs = container.ListBlobs(path, true).ToArray();
-            var regx = new Regex($"{path}{pattern}");
+            try
+            {
+                var storageAccount = CloudStorageAccount.Parse(
+                    ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
+                var containerName = ConfigurationManager.AppSettings["Azure.Storage.Container"];
+                var blobClient = storageAccount.CreateCloudBlobClient();
+                var container = blobClient.GetContainerReference(containerName);
+                var blobs = container.ListBlobs(path, true, options: new BlobRequestOptions
+                {
+                    MaximumExecutionTime = new TimeSpan(0, 0, 0, 20)
+                }).ToArray();
+                var regx = new Regex($"{path}{pattern}");
 
-            var blobsLocation = blobs.OfType<CloudBlockBlob>()
-                .Where(x => regx.IsMatch(x.Name))
-                .Select(x => x.Uri)
-                .ToArray();
+                var blobsLocation = blobs.OfType<CloudBlockBlob>()
+                    .Where(x => regx.IsMatch(x.Name))
+                    .Select(x => x.Uri)
+                    .ToArray();
 
-            return blobsLocation;
+                return blobsLocation;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
     }
 }

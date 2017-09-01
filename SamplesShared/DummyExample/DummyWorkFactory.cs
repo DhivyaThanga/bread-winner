@@ -15,6 +15,12 @@ namespace SamplesShared.DummyExample
             _workAvailableRepo = workAvailableRepo;
         }
 
+        public IWorkItem[] Startup(CancellationToken cancellationToken)
+        {
+            Debug.WriteLine("Producer startup");
+            return GetWorkItems(cancellationToken);
+        }
+
         public IWorkItem[] Create(CancellationToken cancellationToken)
         {
             if (!_workAvailableRepo.IsWorkAvailable())
@@ -22,11 +28,11 @@ namespace SamplesShared.DummyExample
                 return null;
             }
 
-            if (cancellationToken.WaitHandle.WaitOne(1000))
-            {
-                return null;
-            }
+            return GetWorkItems(cancellationToken);
+        }
 
+        private static IWorkItem[] GetWorkItems(CancellationToken cancellationToken)
+        {
             var rand = new Random();
             var synchronizer = new WorkBatch(3);
             var workItems = new[]

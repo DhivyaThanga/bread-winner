@@ -10,8 +10,11 @@ namespace SamplesShared.BlobExample
 {
     public class ReadFromBlobWorkItem : BatchWorkItem
     {
-        public ReadFromBlobWorkItem(string blobUri, WorkBatch workBatch, CancellationToken cancellationToken) : base(blobUri, workBatch, cancellationToken)
+        private readonly string _destPath;
+
+        public ReadFromBlobWorkItem(string blobUri, string destPath, WorkBatch workBatch, CancellationToken cancellationToken) : base(blobUri, workBatch, cancellationToken)
         {
+            _destPath = destPath;
         }
 
         protected override void DoAlways(CancellationToken cancellationToken)
@@ -19,7 +22,7 @@ namespace SamplesShared.BlobExample
             var storageAccount = CloudStorageAccount.Parse(
                 ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
             var blockBlob = GetBlobReference(storageAccount, Id);
-            DownloadBlobFile(blockBlob);
+            DownloadBlobFile(_destPath, blockBlob);
         }
 
 
@@ -41,9 +44,9 @@ namespace SamplesShared.BlobExample
             return blockBlob;
         }
 
-        private static string DownloadBlobFile(ICloudBlob blockBlob)
+        private static string DownloadBlobFile(string destPath, ICloudBlob blockBlob)
         {
-            var path = GetAndCreateFullPath(Path.GetDirectoryName(blockBlob.Name));
+            var path = GetAndCreateFullPath(destPath, Path.GetDirectoryName(blockBlob.Name));
 
             var fileName = Path.GetFileName(blockBlob.Name);
             if (fileName != null)
@@ -52,12 +55,12 @@ namespace SamplesShared.BlobExample
             return fileName;
         }
 
-        private static string GetAndCreateFullPath(string relPath)
+        private static string GetAndCreateFullPath(string basePath, string relPath)
         {
-            if (!Directory.Exists("tmp"))
-                Directory.CreateDirectory("tmp");
+            if (!Directory.Exists(basePath))
+                Directory.CreateDirectory(basePath);
 
-            var path = string.IsNullOrEmpty(relPath) ? "tmp" : Path.Combine("tmp", relPath);
+            var path = string.IsNullOrEmpty(relPath) ? basePath : Path.Combine(basePath, relPath);
 
             if (!string.IsNullOrEmpty(path) && !Directory.Exists(path))
                 Directory.CreateDirectory(path);
