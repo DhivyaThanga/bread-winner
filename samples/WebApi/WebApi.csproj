@@ -144,7 +144,6 @@
   <ItemGroup>
     <Compile Include="AppBuilderExtensions.cs" />
     <Compile Include="BoundedBufferStartup.cs" />
-    <Compile Include="BlobExample\CloudConsole.cs" />
     <Compile Include="Dependency\HttpClientStub.cs" />
     <Compile Include="Dependency\IHttpClient.cs" />
     <Compile Include="IoC\Extensions\AppBuilderWindsorExtensions.cs" />
@@ -154,20 +153,19 @@
     <Compile Include="IoC\Extensions\HttpConfigurationWindsorExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\HttpConfigurationExtensions.cs" />
-    <Compile Include="BlobExample\ReadFromBlobWorkFactory.cs" />
-    <Compile Include="BlobExample\ReadFromBlobWorkItem.cs" />
     <Compile Include="ScheduledProducer.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="IoC\OwinWindsorDependencyScope.cs" />
     <Compile Include="IoC\WindsorHttpDependencyResolver.cs" />
-    <Compile Include="DummyExample\BatchDummyWorkItem.cs" />
-    <Compile Include="DummyExample\DummyWorkFactory.cs" />
-    <Compile Include="WorkAvailableRepo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\BreadWinner\BreadWinner.csproj">
       <Project>{099C7291-7FE4-4AAE-8325-DE8486BB731A}</Project>
       <Name>BreadWinner</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SamplesShared\SamplesShared.csproj">
+      <Project>{db1063a4-0777-4cde-975c-de1f70b31aba}</Project>
+      <Name>SamplesShared</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

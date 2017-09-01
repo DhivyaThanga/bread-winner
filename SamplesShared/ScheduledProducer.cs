@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using BreadWinner;
 
-namespace ConsoleApp
+namespace SamplesShared
 {
     public class ScheduledProducer : AbstractProducer
     {

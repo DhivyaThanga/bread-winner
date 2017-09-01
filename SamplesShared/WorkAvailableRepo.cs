@@ -2,7 +2,7 @@
 using System.Threading;
 using BreadWinner;
 
-namespace WebApi
+namespace SamplesShared
 {
     public class WorkAvailableRepo
     {

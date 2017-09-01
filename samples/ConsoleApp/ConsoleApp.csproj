@@ -43,22 +43,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractProductFactorLoader.cs" />
-    <Compile Include="ScheduledProducer.cs" />
-    <Compile Include="SyncedDummyProductFactorLoader.cs" />
-    <Compile Include="BatchDummyWorkItem.cs" />
-    <Compile Include="DummyProductFactorLoader.cs" />
-    <Compile Include="DummyWorkItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="App.secret.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\BreadWinner\BreadWinner.csproj">
       <Project>{099C7291-7FE4-4AAE-8325-DE8486BB731A}</Project>
       <Name>BreadWinner</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SamplesShared\SamplesShared.csproj">
+      <Project>{DB1063A4-0777-4CDE-975C-DE1F70B31ABA}</Project>
+      <Name>SamplesShared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

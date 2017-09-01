@@ -1,20 +1,26 @@
-﻿using System;
+using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using BreadWinner;
 
-namespace ConsoleApp
+namespace SamplesShared.DummyExample
 {
-    public class SyncedDummyProductFactorLoader : AbstractProductFactorLoader
+    public class DummyWorkFactory
     {
-        protected override IWorkItem[] WorkBatchFactoryMethod(CancellationToken cancellationToken)
+        private readonly WorkAvailableRepo _workAvailableRepo;
+
+        public DummyWorkFactory(WorkAvailableRepo workAvailableRepo)
         {
-            if (Count > 1)
+            _workAvailableRepo = workAvailableRepo;
+        }
+
+        public IWorkItem[] Create(CancellationToken cancellationToken)
+        {
+            if (!_workAvailableRepo.IsWorkAvailable())
             {
                 return null;
             }
-
-            Interlocked.Increment(ref Count);
 
             if (cancellationToken.WaitHandle.WaitOne(1000))
             {
@@ -23,12 +29,14 @@ namespace ConsoleApp
 
             var rand = new Random();
             var synchronizer = new WorkBatch(3);
-            var workItems = new [] {
+            var workItems = new[]
+            {
                 new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
                 new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
                 new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken)
             };
-            Console.WriteLine(
+
+            Debug.WriteLine(
                 $"Producer {Thread.CurrentThread.ManagedThreadId} has created " +
                 $"{workItems[0].Id}, {workItems[1].Id}, {workItems[2].Id}");
 

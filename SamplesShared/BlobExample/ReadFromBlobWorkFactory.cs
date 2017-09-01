@@ -3,12 +3,13 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using BreadWinner;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace WebApi.BlobExample
+namespace SamplesShared.BlobExample
 {
     public class ReadFromBlobWorkFactory
     {
@@ -29,7 +30,7 @@ namespace WebApi.BlobExample
                 return null;
             }
 
-            var fileLocations = GetAllFilesInBlob();
+            var fileLocations = GetAllFilesWithPatternInBlob(".*part.*");
             var batch = new WorkBatch(fileLocations.Length);
 
             if(Directory.Exists("tmp"))
@@ -43,7 +44,7 @@ namespace WebApi.BlobExample
                 .ToArray();
         }
 
-        private static Uri[] GetAllFilesInBlob()
+        private static Uri[] GetAllFilesWithPatternInBlob(string pattern)
         {
             var storageAccount = CloudStorageAccount.Parse(
                 ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
@@ -52,7 +53,12 @@ namespace WebApi.BlobExample
             var container = blobClient.GetContainerReference(containerName);
             var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
             var blobs = container.ListBlobs(path, true).ToArray();
-            var blobsLocation = blobs.OfType<CloudBlockBlob>().Select(x => x.Uri).ToArray();
+            var regx = new Regex($"{path}{pattern}");
+
+            var blobsLocation = blobs.OfType<CloudBlockBlob>()
+                .Where(x => regx.IsMatch(x.Name))
+                .Select(x => x.Uri)
+                .ToArray();
 
             return blobsLocation;
         }

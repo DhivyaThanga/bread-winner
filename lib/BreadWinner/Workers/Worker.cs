@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading;
 
 namespace BreadWinner
@@ -24,7 +25,22 @@ namespace BreadWinner
                 IsBackground = true
             };
 
+            SetThreadPriority();
+
             WrappedThread.Start();
+        }
+
+        protected abstract void Loop(CancellationToken cancellationToken);
+
+        private void SetThreadPriority()
+        {
+            var valueString = ConfigurationManager.AppSettings[ConfigOptions.ThreadPriority];
+            if (valueString == null) return;
+            ThreadPriority threadPriority;
+            if (Enum.TryParse(valueString, out threadPriority))
+            {
+                WrappedThread.Priority = threadPriority;
+            }
         }
 
         private ThreadStart GetThreadAction(
@@ -44,14 +60,20 @@ namespace BreadWinner
             };
         }
 
-        protected abstract void Loop(CancellationToken cancellationToken);
-
         private void Stop()
         {
-            if (!WrappedThread.Join(1000))
+            if (!WrappedThread.Join(GetThreadWaitTime()))
             {
                 WrappedThread.Abort();
             }
+        }
+
+        private static int GetThreadWaitTime()
+        {
+            var tp = ConfigurationManager.AppSettings[ConfigOptions.WaitXForthreads];
+            if (tp == null) return 0;
+            int tpInt;
+            return int.TryParse(tp, out tpInt) ? tpInt : 0;
         }
     }
 }

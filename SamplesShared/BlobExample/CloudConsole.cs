@@ -1,9 +1,9 @@
-﻿using System;
-using System.Configuration;
-using Microsoft.WindowsAzure.Storage;
+﻿using Microsoft.WindowsAzure.Storage;
+using System;
 using Microsoft.WindowsAzure.Storage.Table;
+using System.Configuration;
 
-namespace WebApi.BlobExample
+namespace SamplesShared.BlobExample
 {
     public static class CloudConsole
     {

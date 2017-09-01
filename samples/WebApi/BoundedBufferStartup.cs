@@ -1,7 +1,9 @@
 using System;
+using System.Threading;
 using BreadWinner;
 using Owin;
-using WebApi.BlobExample;
+using SamplesShared;
+using SamplesShared.BlobExample;
 
 namespace WebApi
 {
@@ -9,28 +11,18 @@ namespace WebApi
     {
         private IWorkerPool _workerPool;
 
+        public BoundedBufferStartup()
+        {
+        }
+
         public void Start(IAppBuilder appBuilder)
         {
-            var cancellationToken = appBuilder.GetOnAppDisposing();
+            var pool = WorkerPoolExample.CreatePool(
+                new TimeSpan(0, 0, 0, 15), 
+                new TimeSpan(0, 0, 0, 10),
+                2);
 
-            var factory = new WorkerFactory();
-            _workerPool = factory.CreatePool();
-            
-            var workAvailableRepo = new WorkAvailableRepo(1);
-            _workerPool.Add(
-                factory.CreateScheduledJob(
-                    new TimeSpan(0, 0, 10, 0), token => { workAvailableRepo.Reset(); }));
-
-            var workFactory = new ReadFromBlobWorkFactory(
-                () => _workerPool != null && _workerPool.IsAlive, workAvailableRepo);
-            _workerPool.Add(factory.CreateProducer(
-                () => new ScheduledProducer(
-                    new TimeSpan(days: 0, hours: 0, minutes: 0, seconds: 10),
-                    workFactory.Create)));
-
-            _workerPool.Add(factory.CreateConsumers(2));
-
-            _workerPool.Start(cancellationToken);
+            pool.Start(appBuilder.GetOnAppDisposing());
         }
     }
 }

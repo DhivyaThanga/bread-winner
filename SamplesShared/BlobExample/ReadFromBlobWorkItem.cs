@@ -6,7 +6,7 @@ using BreadWinner;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace WebApi.BlobExample
+namespace SamplesShared.BlobExample
 {
     public class ReadFromBlobWorkItem : BatchWorkItem
     {
@@ -41,13 +41,15 @@ namespace WebApi.BlobExample
             return blockBlob;
         }
 
-        private static void DownloadBlobFile(ICloudBlob blockBlob)
+        private static string DownloadBlobFile(ICloudBlob blockBlob)
         {
             var path = GetAndCreateFullPath(Path.GetDirectoryName(blockBlob.Name));
 
             var fileName = Path.GetFileName(blockBlob.Name);
             if (fileName != null)
                 blockBlob.DownloadToFile(Path.Combine(path, fileName), FileMode.OpenOrCreate);
+
+            return fileName;
         }
 
         private static string GetAndCreateFullPath(string relPath)
