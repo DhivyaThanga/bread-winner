@@ -21,9 +21,27 @@ To install, you can use the related nuget package.
 Install-Package BreadWinner -Version 0.5.0
 ```
 ## Setup
+Setup is pretty easy providing that:
+* you have created you own concrete producer class inheriting from abstract producer
+* you have a cancellation token that will be cancelled when closing you application or when needed
+
+More on the first point in [Your Concrete Producer](#YourConcreteProducer)
+
 ```csharp
 
-```
+IWorkerFactory factory = new WorkerFactory();
 
+IWorker producer = factory.CreateProducer(yourConcreteProducerFactoryMethod)
+
+IWorker consumers = factory.CreateConsumers(numberOfConcurrentConsumers);
+
+IWorkerPool workerPool = factory.CreatePool();
+workerPool.Add(producer);
+workerPool.Add(consumers);
+
+workerPool.Start(yourCancellationToken);
+
+```
+## <a name="YourConcreteProducer"></a> Your Concrete Producer
 
 ## Configuration
