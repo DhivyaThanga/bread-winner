@@ -4,7 +4,7 @@ Poor man implementation of producer consumer paradigm in C#.
 
 This library relies heavily on threads. TPL should be avoided when using this library, even at the cost of synchrounously waiting tasks when no synchronous API is available. 
 
-Further details in the [justification](#Justification) section, but the general idea is that the purpose of this library is avoiding to use the Managed Thread Pool. This is epescially useful in the context of Web API.
+Further details in the [justification section](#Justification), but the general idea is that the purpose of this library is avoiding to use the Managed Thread Pool. This is epescially useful in the context of Web API.
 
 Every worker instance uses it's own thread, therefore use with caution at your own risk.
 
@@ -39,11 +39,9 @@ Install-Package BreadWinner -Version 0.5.0
 ## Setup
 Setup is pretty easy providing that:
 * you have created you own concrete producer class inheriting from abstract producer
-* you have a cancellation token that will be cancelled when closing you application or when needed
+* you have a cancellation token that will be cancelled when closing you application or when needed. The entire lifecycle of the workers is managed through the cancellation token, so beware that when a cancellation is requested on the passed token, the pool will stop. You can configure the amount of time that will be waited before forcing the pool to stop (more in the [configuration section](#Configuration)
 
-More on the first point in the [your concrete producer](#YourConcreteProducer) section.
-
-You can find an example below.
+More on the first point in the [your concrete producer section](#YourConcreteProducer).
 
 ```csharp
 
@@ -61,4 +59,4 @@ workerPool.Start(yourCancellationToken);
 
 ```
 
-## Configuration
+## <a name="Configuration"></a>Configuration
