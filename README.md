@@ -4,11 +4,11 @@ Poor man implementation of producer consumer paradigm in C#.
 
 This library relies heavily on threads. TPL should be avoided when using this library, even at the cost of synchrounously waiting tasks when no synchronous API is available. 
 
-Further details in the justification section, but the general idea is that the purpose of this library is avoiding to use the Managed Thread Pool. This is epescially useful in the context of Web API.
+Further details in the [Justification](#Justification) section, but the general idea is that the purpose of this library is avoiding to use the Managed Thread Pool. This is epescially useful in the context of Web API.
 
 Every worker instance uses it's own thread, therefore use with caution at your own risk.
 
-## Justification
+## <a name="Justification"></a> Justification
 
 The main reason to write this library emerged from the need of downloading multiple files from Azure Blob Storage, decoding them and loading them in a shared memory cache with a Web API application. The main caveat of the process is that all async programming from TPL cannot be involved, as there is no guarantee which thread is going to pick up the task after you await. This means that you'd be stealing threads from Web API threadpool, which should be used to serve your client's requests exclusively.
 
