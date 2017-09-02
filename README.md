@@ -14,12 +14,16 @@ The main reason to write this library emerged from the need of downloading multi
 
 The overhead of creating threads is minimal and mainly affects memory. The consumers are, as a matter of fact, all waiting for signals, and won't be scheduled unless there is some work to do. Moreover, it's possible to set up the priority of the threads wrapped in the workers, making the approach more flexible for what regards the scheduling. There is no concrete implementation of the producer in the library itself, but one is offered in the samples. This would normally be the only element that would be polling a source, and would be scheduled. If the schedule is not a very short period, the overhead caused by context switching the producer process would be minimal. The ratio has to be though that the producer would the minimum amount of work required to create work items to be consumed by the consumers.
 
-##Installing
+## Installing
 
 To install, you can use the related nuget package.
 ```powershell
 Install-Package BreadWinner -Version 0.5.0
 ```
-##Setup
+## Setup
+```csharp
 
-##Configuration
+```
+
+
+## Configuration
