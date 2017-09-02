@@ -16,11 +16,19 @@ The overhead of creating threads is minimal and mainly affects memory. The consu
 
 ## Components
 
-**A Worker Pool**
+**Worker Pool**
 
 The pool is a collection of workers (classes implementing the IWorker interface). The pool will be responsible of starting all of the instances registered in it. The pool has also a property called IsAlive, which will be false when one or more of children have aborted or terminated. You can use this property to monitor the health of your pool.
 
 **<a name="YourConcreteProducer"></a> Your Concrete Producer**
+
+**Consumers**
+
+**Scheduled Job**
+
+**Worker Factory**
+
+You will need to use the WorkerFactory to create objects of this library. Creating some consumers, a scheduled job or a pool is pretty straight forward. Creating a producer requires a factory method that will tell the factory how to instantiate your concrete producer.
 
 ## Installing
 
@@ -35,7 +43,7 @@ Setup is pretty easy providing that:
 
 More on the first point in the [your concrete producer](#YourConcreteProducer) section.
 
-You can find an easy example below. You will need to use the WorkerFactory to create objects of this library. Creating some consumers or a pool is pretty straight forward.
+You can find an example below.
 
 ```csharp
 
