@@ -1,8 +1,8 @@
 # Bread Winner
 
-Poor man implementation of producer consumer paradigm in C#.
+Lightweight implementation of producer consumer paradigm in C#.
 
-This library relies heavily on threads. TPL should be avoided when using this library, even at the cost of synchrounously waiting tasks when no synchronous API is available. 
+This library relies heavily on threads. TPL should be avoided when using this library, even at the cost of synchronously waiting tasks when no synchronous API is available. 
 
 Further details [here][justification], but the general idea is that the purpose of this library is avoiding to use the Managed Thread Pool. This is epescially useful in the context of Web API.
 
@@ -12,7 +12,7 @@ Every worker instance uses it's own thread, therefore use with caution at your o
 
 To install, you can use the related nuget package.
 ```powershell
-Install-Package BreadWinner -Version 0.5.0
+Install-Package BreadWinner
 ```
 
 ## Wiki
