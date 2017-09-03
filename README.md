@@ -16,15 +16,80 @@ The overhead of creating threads is minimal and mainly affects memory. The consu
 
 ## Components
 
-**Worker Pool**
+**Your Concrete Work Items**
 
-The pool is a collection of workers (classes implementing the IWorker interface). The pool will be responsible of starting all of the instances registered in it. The pool has also a property called IsAlive, which will be false when one or more of children have aborted or terminated. You can use this property to monitor the health of your pool.
+The first thing you will need is to create a Work Item that will have implement the IWorkItem interface. They can be viewed as unit of work to do. Work items will be queued by the producer and consumed by the consumers (more on this later). 
+
+The framework also provide an abtract class that introduces the concept of a batch. You can inherit this class if you have work that can be initially split and run in parallel but needs to be some degree of synchronization at the end.
 
 **<a name="YourConcreteProducer"></a> Your Concrete Producer**
+
+A concrete producer is implementing the AbstractProducer class. It will have to implement three methods, Startup, QueueWork and WaitForWorkOrCancellation. Startup method is run once, when your producer object gets instantiated, in the thread that is instantiating the object. When Startup method returns, a new thread is created, which will continuosly run the cycle WaitForWorkOrCancellation and then QueueWork.
+
+Both the Startup method and the QueueWork method take a function to queue the work that is passed by the framework and you don't have to worry about. The function is called AddWork, and takes as parameters a cancellation token, and, more importantly, an array of IWorkItems.
+
+```csharp
+public class ScheduledProducer : AbstractProducer
+{
+    private readonly TimeSpan _timespan;
+    private readonly Func<CancellationToken, IWorkItem[]> _workFactoryMethod;
+    private readonly Func<CancellationToken, IWorkItem[]> _startupMethod;
+
+    public ScheduledProducer(TimeSpan timespan,
+        Func<CancellationToken, IWorkItem[]> workFactoryMethod,
+        Func<CancellationToken, IWorkItem[]> startupMethod = null)
+    {
+        _timespan = timespan;
+        _workFactoryMethod = workFactoryMethod;
+        _startupMethod = startupMethod;
+    }
+
+    protected override void Startup(
+        Action<IWorkItem[], CancellationToken> addWork, CancellationToken cancellationToken)
+    {
+        var workBatch = _startupMethod?.Invoke(cancellationToken);
+
+        if (workBatch == null || cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
+
+        addWork(workBatch, cancellationToken);
+    }
+
+    protected override void QueueWork(
+        Action<IWorkItem[], CancellationToken> addWork, 
+        CancellationToken cancellationToken)
+    {
+        Console.WriteLine("Producer running...");
+
+        while (true)
+        {
+            var workBatch = _workFactoryMethod(cancellationToken);
+
+            if (workBatch == null || cancellationToken.IsCancellationRequested)
+            {
+                break;
+            }
+
+            addWork(workBatch, cancellationToken);
+        }
+    }
+
+    protected override bool WaitForWorkOrCancellation(CancellationToken cancellationToken)
+    {
+        return cancellationToken.WaitHandle.WaitOne(_timespan);
+    }
+}
+```
 
 **Consumers**
 
 **Scheduled Job**
+
+**Worker Pool**
+
+The pool is a collection of workers (classes implementing the IWorker interface, e.g. any producer, consumer or scheduled job). The pool will be responsible of starting all of the instances registered in it. The pool has also a property called IsAlive, which will be false when one or more of children have aborted or terminated. You can use this property to monitor the health of your pool.
 
 **Worker Factory**
 
@@ -39,7 +104,7 @@ Install-Package BreadWinner -Version 0.5.0
 ## Setup
 Setup is pretty easy providing that:
 * you have created you own concrete producer class inheriting from abstract producer
-* you have a cancellation token that will be cancelled when closing you application or when needed. The entire lifecycle of the workers is managed through the cancellation token, so beware that when a cancellation is requested on the passed token, the pool will stop. You can configure the amount of time that will be waited before forcing the pool to stop, you can find how in the [configuration section](#Configuration)
+* you have a cancellation token that will be cancelled when closing your application or when needed. The entire lifecycle of the workers is managed through the cancellation token, so beware that when a cancellation is requested on the passed token, the pool will stop. You can configure the amount of time that will be waited before forcing the pool to stop, you can find how in the [configuration section](#Configuration)
 
 More on the first point in the [your concrete producer section](#YourConcreteProducer).
 
