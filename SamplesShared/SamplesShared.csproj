@@ -70,7 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlobExample\CloudConsole.cs" />
-    <Compile Include="BlobExample\ReadFromBlobWorkFactory.cs" />
+    <Compile Include="ISampleWorkFactory.cs" />
+    <Compile Include="BlobExample\ReadFromBlobSampleWorkFactory.cs" />
     <Compile Include="BlobExample\ReadFromBlobWorkItem.cs" />
     <Compile Include="DummyExample\BatchDummyWorkItem.cs" />
     <Compile Include="DummyExample\DummyWorkFactory.cs" />

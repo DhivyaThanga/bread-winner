@@ -11,12 +11,12 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SamplesShared.BlobExample
 {
-    public class ReadFromBlobWorkFactory
+    public class ReadFromBlobSampleWorkFactory : ISampleWorkFactory
     {
         private readonly Func<bool> _checkBoundedBufferStatusFunc;
         private readonly WorkAvailableRepo _workAvailableRepo;
 
-        public ReadFromBlobWorkFactory(Func<bool> checkBoundedBufferStatusFunc, WorkAvailableRepo workAvailableRepo)
+        public ReadFromBlobSampleWorkFactory(Func<bool> checkBoundedBufferStatusFunc, WorkAvailableRepo workAvailableRepo)
         {
             _checkBoundedBufferStatusFunc = checkBoundedBufferStatusFunc;
             _workAvailableRepo = workAvailableRepo;

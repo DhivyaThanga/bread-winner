@@ -6,7 +6,7 @@ using BreadWinner;
 
 namespace SamplesShared.DummyExample
 {
-    public class DummyWorkFactory
+    public class DummyWorkFactory : ISampleWorkFactory
     {
         private readonly WorkAvailableRepo _workAvailableRepo;
 

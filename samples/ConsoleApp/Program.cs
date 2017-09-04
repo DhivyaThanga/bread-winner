@@ -12,6 +12,7 @@ namespace ConsoleApp
             Debug.Listeners.Add(new ConsoleTraceListener());
 
             var pool = WorkerPoolExample.CreatePool(
+                false,
                 new TimeSpan(0, 0, 0, 15),
                 new TimeSpan(0, 0, 0, 10),
                 100);
