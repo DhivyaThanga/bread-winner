@@ -6,9 +6,9 @@ using SamplesShared.BlobExample;
 
 namespace SamplesShared.DummyExample
 {
-    public class BatchDummyWorkItem : BatchWorkItem
+    public class DummyWorkItem : AbstractBatchedWorkItem
     {
-        public BatchDummyWorkItem(
+        public DummyWorkItem(
             int id, WorkBatch workBatch, CancellationToken cancellationToken) 
             : base(id.ToString(), workBatch, cancellationToken)
         {

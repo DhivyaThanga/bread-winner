@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace BreadWinner
 {
-    public abstract class BatchWorkItem : IWorkItem
+    public abstract class AbstractBatchedWorkItem : IWorkItem
     {
         private readonly WorkBatch _workBatch;
         private readonly CancellationToken _cancellationToken;
@@ -12,7 +12,7 @@ namespace BreadWinner
         public string Id { get; }
         public WorkItemStatus WorkItemStatus { get; protected set; }
 
-        protected BatchWorkItem(
+        protected AbstractBatchedWorkItem(
             string id, WorkBatch workBatch, CancellationToken cancellationToken)
         {
             Id = id;

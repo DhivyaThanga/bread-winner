@@ -38,9 +38,9 @@ namespace SamplesShared.DummyExample
             var synchronizer = new WorkBatch(3);
             var workItems = new[]
             {
-                new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
-                new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken),
-                new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken)
+                new DummyWorkItem(rand.Next(), synchronizer, cancellationToken),
+                new DummyWorkItem(rand.Next(), synchronizer, cancellationToken),
+                new DummyWorkItem(rand.Next(), synchronizer, cancellationToken)
             };
 
             CloudConsole.WriteLine(

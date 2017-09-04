@@ -73,7 +73,7 @@
     <Compile Include="ISampleWorkFactory.cs" />
     <Compile Include="BlobExample\ReadFromBlobSampleWorkFactory.cs" />
     <Compile Include="BlobExample\ReadFromBlobWorkItem.cs" />
-    <Compile Include="DummyExample\BatchDummyWorkItem.cs" />
+    <Compile Include="DummyExample\DummyWorkItem.cs" />
     <Compile Include="DummyExample\DummyWorkFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduledProducer.cs" />

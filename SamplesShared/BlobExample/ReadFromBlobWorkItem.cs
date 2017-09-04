@@ -9,7 +9,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SamplesShared.BlobExample
 {
-    public class ReadFromBlobWorkItem : BatchWorkItem
+    public class ReadFromBlobWorkItem : AbstractBatchedWorkItem
     {
         private readonly string _destPath;
 
