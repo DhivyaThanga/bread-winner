@@ -36,12 +36,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -58,8 +52,8 @@
       <Project>{099C7291-7FE4-4AAE-8325-DE8486BB731A}</Project>
       <Name>BreadWinner</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SamplesShared\SamplesShared.csproj">
-      <Project>{DB1063A4-0777-4CDE-975C-DE1F70B31ABA}</Project>
+    <ProjectReference Include="..\SamplesShared\SamplesShared.csproj">
+      <Project>{db1063a4-0777-4cde-975c-de1f70b31aba}</Project>
       <Name>SamplesShared</Name>
     </ProjectReference>
   </ItemGroup>

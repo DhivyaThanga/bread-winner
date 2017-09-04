@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "samples\WebApi\We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "samples\ConsoleApp\ConsoleApp.csproj", "{6EC93D0A-25C5-48FE-9A87-09F16E580D1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplesShared", "SamplesShared\SamplesShared.csproj", "{DB1063A4-0777-4CDE-975C-DE1F70B31ABA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplesShared", "samples\SamplesShared\SamplesShared.csproj", "{DB1063A4-0777-4CDE-975C-DE1F70B31ABA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

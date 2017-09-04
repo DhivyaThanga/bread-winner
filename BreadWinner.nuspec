@@ -2,11 +2,10 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>BreadWinner</id>
-    <version>0.5.1</version>
+    <version>0.6.0</version>
     <title>BreadWinner</title>
     <authors>Guglielmo Porcellini</authors>
     <owners>Guglielmo Porcellini</owners>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Poor man implementation of Producer Consumer in C#</description>
     <language>en-gb</language>
   </metadata>
