@@ -23,7 +23,9 @@ namespace SamplesShared.BlobExample
                 var storageAccount = CloudStorageAccount.Parse(
                     ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
                 var blockBlob = GetBlobReference(storageAccount, Id);
+
                 Result = DownloadBlobFile(blockBlob);
+                WorkItemStatus = WorkItemStatus.Successful;
             }
             catch (Exception e)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Threading;
 using SamplesShared;
 
@@ -9,6 +10,8 @@ namespace ConsoleApp
     {
         private static void Main(string[] args)
         {
+            ServicePointManager.DefaultConnectionLimit = 1000;
+
             var pool = WorkerPoolExample.CreatePool(
                 false,
                 new TimeSpan(0, 0, 0, 30),

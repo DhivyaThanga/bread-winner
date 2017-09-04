@@ -23,7 +23,6 @@ namespace BreadWinner
         public void Do(CancellationToken cancellationToken)
         {
             DoAlways(_cancellationToken);
-            WorkItemStatus = WorkItemStatus.Successful;
 
             if (Batch.WorkDone(this))
             {
