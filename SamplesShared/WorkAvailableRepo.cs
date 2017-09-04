@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading;
 using BreadWinner;
+using SamplesShared.BlobExample;
 
 namespace SamplesShared
 {
@@ -18,7 +19,7 @@ namespace SamplesShared
 
         public void Reset()
         {
-            Debug.WriteLine("Work Arrived!!");
+            CloudConsole.WriteLine("Work Arrived!!");
             Interlocked.Exchange(ref _count, 0);
         }
 

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using BreadWinner;
+using SamplesShared.BlobExample;
 
 namespace SamplesShared.DummyExample
 {
@@ -17,7 +18,7 @@ namespace SamplesShared.DummyExample
 
         public IWorkItem[] Startup(CancellationToken cancellationToken)
         {
-            Debug.WriteLine("Producer startup");
+            CloudConsole.WriteLine("Producer startup");
             return GetWorkItems(cancellationToken);
         }
 
@@ -42,7 +43,7 @@ namespace SamplesShared.DummyExample
                 new BatchDummyWorkItem(rand.Next(), synchronizer, cancellationToken)
             };
 
-            Debug.WriteLine(
+            CloudConsole.WriteLine(
                 $"Producer {Thread.CurrentThread.ManagedThreadId} has created " +
                 $"{workItems[0].Id}, {workItems[1].Id}, {workItems[2].Id}");
 

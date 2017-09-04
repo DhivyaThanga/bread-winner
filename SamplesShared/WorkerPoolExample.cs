@@ -14,7 +14,7 @@ namespace SamplesShared
             var factory = new WorkerFactory();
             var workerPool = factory.CreatePool();
 
-            var workAvailableRepo = new WorkAvailableRepo(20);
+            var workAvailableRepo = new WorkAvailableRepo(1);
             workerPool.Add(
                 factory.CreateScheduledJob(
                     workArrivedSchedule, token => { workAvailableRepo.Reset(); }));

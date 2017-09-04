@@ -24,14 +24,13 @@ namespace SamplesShared.BlobExample
 
         public IWorkItem[] Startup(CancellationToken cancellationToken)
         {
-            Debug.WriteLine("Bounded buffer starting");
             var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
             return GetWorkItems(path, "tmp/startup", cancellationToken);
         }
 
         public IWorkItem[] Create(CancellationToken cancellationToken)
         {
-            if (_checkBoundedBufferStatusFunc()) Debug.WriteLine("Bounded buffer healthy");
+            if (_checkBoundedBufferStatusFunc()) CloudConsole.WriteLine("Bounded buffer healthy");
             var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
             if (!_workAvailableRepo.IsWorkAvailable())
             {
@@ -49,7 +48,7 @@ namespace SamplesShared.BlobExample
             if (Directory.Exists(destPath))
                 Directory.Delete(destPath, true);
 
-            CloudConsole.WriteLine($"Created batch {batch.Id} with {fileLocations.Length} blobs");
+            CloudConsole.WriteLine($"Created batch {batch.BatchId} with {fileLocations.Length} blobs");
 
             return fileLocations
                 .Select(x => new ReadFromBlobWorkItem(x.AbsoluteUri, destPath, batch, cancellationToken))

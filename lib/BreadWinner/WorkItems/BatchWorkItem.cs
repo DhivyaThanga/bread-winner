@@ -8,9 +8,9 @@ namespace BreadWinner
         private readonly WorkBatch _workBatch;
         private readonly CancellationToken _cancellationToken;
 
-        public string BatchId => _workBatch.Id;
+        public string BatchId => _workBatch.BatchId;
         public string Id { get; }
-        public WorkItemStatus WorkItemStatus { get; private set; }
+        public WorkItemStatus WorkItemStatus { get; protected set; }
 
         protected BatchWorkItem(
             string id, WorkBatch workBatch, CancellationToken cancellationToken)
@@ -22,16 +22,8 @@ namespace BreadWinner
 
         public void Do(CancellationToken cancellationToken)
         {
-            try
-            {
-                DoAlways(_cancellationToken);
-                WorkItemStatus = WorkItemStatus.Successful;
-            }
-            catch (Exception exception)
-            {
-                WorkItemStatus = WorkItemStatus.Failed;
-                DoAlwaysErrorCallback(exception, cancellationToken);
-            }
+            DoAlways(_cancellationToken);
+            WorkItemStatus = WorkItemStatus.Successful;
 
             if (_workBatch.WorkDone(this))
             {
@@ -40,8 +32,6 @@ namespace BreadWinner
         }
 
         protected abstract void DoAlways(CancellationToken cancellationToken);
-
-        protected abstract void DoAlwaysErrorCallback(Exception exception, CancellationToken cancellationToken);
 
         protected abstract void DoFinally(CancellationToken cancellationToken);
     }

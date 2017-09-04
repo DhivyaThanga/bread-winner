@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using BreadWinner;
+using SamplesShared.BlobExample;
 
 namespace SamplesShared.DummyExample
 {
@@ -15,19 +16,14 @@ namespace SamplesShared.DummyExample
 
         protected override void DoAlways(CancellationToken cancellationToken)
         {
-            Debug.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId} consuming {Id}");
+            CloudConsole.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId} consuming {Id}");
 
             cancellationToken.WaitHandle.WaitOne(2000);
         }
 
-        protected override void DoAlwaysErrorCallback(Exception exception, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override void DoFinally(CancellationToken cancellationToken)
         {
-            Debug.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId} consuming {Id}, LAST OF THE BATCH");
+            CloudConsole.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId} consuming {Id}, LAST OF THE BATCH");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using BreadWinner;
@@ -19,16 +20,21 @@ namespace SamplesShared.BlobExample
 
         protected override void DoAlways(CancellationToken cancellationToken)
         {
-            var storageAccount = CloudStorageAccount.Parse(
-                ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
-            var blockBlob = GetBlobReference(storageAccount, Id);
-            DownloadBlobFile(_destPath, blockBlob);
-        }
+            try
+            {
+                CloudConsole.WriteLine($"Work Item {Id} of {BatchId} starting");
+                var storageAccount = CloudStorageAccount.Parse(
+                    ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
+                var blockBlob = GetBlobReference(storageAccount, Id);
+                DownloadBlobFile(_destPath, blockBlob);
+                CloudConsole.WriteLine($"Work Item {Id} of {BatchId} done");
+            }
+            catch (Exception)
+            {
+                CloudConsole.WriteLine($"Work Item {Id} of {BatchId} failed");
+                WorkItemStatus = WorkItemStatus.Failed;
+            }
 
-
-        protected override void DoAlwaysErrorCallback(Exception exception, CancellationToken cancellationToken)
-        {
-            throw exception;
         }
 
         protected override void DoFinally(CancellationToken cancellationToken)
@@ -49,8 +55,9 @@ namespace SamplesShared.BlobExample
             var path = GetAndCreateFullPath(destPath, Path.GetDirectoryName(blockBlob.Name));
 
             var fileName = Path.GetFileName(blockBlob.Name);
+            var target = new MemoryStream();
             if (fileName != null)
-                blockBlob.DownloadToFile(Path.Combine(path, fileName), FileMode.OpenOrCreate);
+                blockBlob.DownloadToStream(target);
 
             return fileName;
         }

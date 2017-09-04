@@ -9,11 +9,9 @@ namespace ConsoleApp
     {
         private static void Main(string[] args)
         {
-            Debug.Listeners.Add(new ConsoleTraceListener());
-
             var pool = WorkerPoolExample.CreatePool(
                 false,
-                new TimeSpan(0, 0, 0, 15),
+                new TimeSpan(0, 0, 0, 30),
                 new TimeSpan(0, 0, 0, 10),
                 100);
             var tokenSource = new CancellationTokenSource();

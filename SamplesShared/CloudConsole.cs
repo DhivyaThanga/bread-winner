@@ -1,14 +1,28 @@
-﻿using Microsoft.WindowsAzure.Storage;
-using System;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using System;
 using System.Configuration;
+using System.Diagnostics;
+using System.Globalization;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 
-namespace SamplesShared.BlobExample
+namespace SamplesShared
 {
     public static class CloudConsole
     {
         public static void WriteLine(string line)
         {
+            if (Environment.UserInteractive)
+            {
+                Console.WriteLine(
+                    $"[{DateTime.Now.ToString("hh:mm:ss.fff", CultureInfo.InvariantCulture)}] - {line}");
+                return;
+            }
+
+#if DEBUG
+            Debug.WriteLine($"{line}");
+            return;
+#endif
+
             var storageAccount = CloudStorageAccount.Parse(
                 ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
 

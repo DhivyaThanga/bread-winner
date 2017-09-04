@@ -69,7 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlobExample\CloudConsole.cs" />
+    <Compile Include="CloudConsole.cs" />
     <Compile Include="ISampleWorkFactory.cs" />
     <Compile Include="BlobExample\ReadFromBlobSampleWorkFactory.cs" />
     <Compile Include="BlobExample\ReadFromBlobWorkItem.cs" />
