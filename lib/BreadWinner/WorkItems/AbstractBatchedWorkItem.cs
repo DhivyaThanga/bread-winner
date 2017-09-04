@@ -5,18 +5,18 @@ namespace BreadWinner
 {
     public abstract class AbstractBatchedWorkItem : IWorkItem
     {
-        private readonly WorkBatch _workBatch;
         private readonly CancellationToken _cancellationToken;
 
-        public string BatchId => _workBatch.BatchId;
+        protected WorkBatch Batch { get; }
         public string Id { get; }
         public WorkItemStatus WorkItemStatus { get; protected set; }
+        public object Result { get; protected set; }
 
         protected AbstractBatchedWorkItem(
-            string id, WorkBatch workBatch, CancellationToken cancellationToken)
+            string id, WorkBatch batch, CancellationToken cancellationToken)
         {
             Id = id;
-            _workBatch = workBatch;
+            Batch = batch;
             _cancellationToken = cancellationToken;
         }
 
@@ -25,7 +25,7 @@ namespace BreadWinner
             DoAlways(_cancellationToken);
             WorkItemStatus = WorkItemStatus.Successful;
 
-            if (_workBatch.WorkDone(this))
+            if (Batch.WorkDone(this))
             {
                 DoFinally(_cancellationToken);
             }

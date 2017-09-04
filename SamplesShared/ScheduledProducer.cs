@@ -36,8 +36,6 @@ namespace SamplesShared
             Action<IWorkItem[], CancellationToken> addWork, 
             CancellationToken cancellationToken)
         {
-            Console.WriteLine("Producer running...");
-
             while (true)
             {
                 var workBatch = _workFactoryMethod(cancellationToken);

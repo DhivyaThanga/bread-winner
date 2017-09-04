@@ -9,8 +9,8 @@ namespace SamplesShared.DummyExample
     public class DummyWorkItem : AbstractBatchedWorkItem
     {
         public DummyWorkItem(
-            int id, WorkBatch workBatch, CancellationToken cancellationToken) 
-            : base(id.ToString(), workBatch, cancellationToken)
+            int id, WorkBatch batch, CancellationToken cancellationToken) 
+            : base(id.ToString(), batch, cancellationToken)
         {
         }
 

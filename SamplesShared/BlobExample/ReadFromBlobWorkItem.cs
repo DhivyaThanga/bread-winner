@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -11,27 +12,22 @@ namespace SamplesShared.BlobExample
 {
     public class ReadFromBlobWorkItem : AbstractBatchedWorkItem
     {
-        private readonly string _destPath;
-
-        public ReadFromBlobWorkItem(string blobUri, string destPath, WorkBatch workBatch, CancellationToken cancellationToken) : base(blobUri, workBatch, cancellationToken)
+        public ReadFromBlobWorkItem(string blobUri, WorkBatch batch, CancellationToken cancellationToken) : base(blobUri, batch, cancellationToken)
         {
-            _destPath = destPath;
         }
 
         protected override void DoAlways(CancellationToken cancellationToken)
         {
             try
             {
-                CloudConsole.WriteLine($"Work Item {Id} of {BatchId} starting");
                 var storageAccount = CloudStorageAccount.Parse(
                     ConfigurationManager.AppSettings["Azure.Storage.ConnectionString"]);
                 var blockBlob = GetBlobReference(storageAccount, Id);
-                DownloadBlobFile(_destPath, blockBlob);
-                CloudConsole.WriteLine($"Work Item {Id} of {BatchId} done");
+                Result = DownloadBlobFile(blockBlob);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                CloudConsole.WriteLine($"Work Item {Id} of {BatchId} failed");
+                CloudConsole.WriteLine($"Work Item {Id} of {Batch.Id} failed, exception {e.Message}");
                 WorkItemStatus = WorkItemStatus.Failed;
             }
 
@@ -39,7 +35,13 @@ namespace SamplesShared.BlobExample
 
         protected override void DoFinally(CancellationToken cancellationToken)
         {
-            CloudConsole.WriteLine($"Batch {BatchId} done");
+            var results = new List<string>();
+            foreach (var done in Batch.CompletedWorkItems)
+            {
+                results.Add((string) done.Result);
+            }
+
+            CloudConsole.WriteLine($"Batch {Batch.Id} done");
         }
 
         private static ICloudBlob GetBlobReference(CloudStorageAccount storageAccount, string uri)
@@ -50,16 +52,17 @@ namespace SamplesShared.BlobExample
             return blockBlob;
         }
 
-        private static string DownloadBlobFile(string destPath, ICloudBlob blockBlob)
+        private static string DownloadBlobFile(ICloudBlob blockBlob)
         {
-            var path = GetAndCreateFullPath(destPath, Path.GetDirectoryName(blockBlob.Name));
-
             var fileName = Path.GetFileName(blockBlob.Name);
             var target = new MemoryStream();
             if (fileName != null)
                 blockBlob.DownloadToStream(target);
 
-            return fileName;
+            target.Position = 0;
+            var streamReader = new StreamReader(target);
+
+            return streamReader.ReadToEnd();
         }
 
         private static string GetAndCreateFullPath(string basePath, string relPath)

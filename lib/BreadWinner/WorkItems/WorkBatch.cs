@@ -7,9 +7,9 @@ namespace BreadWinner
     public class WorkBatch
     {
         private int _workBatchSize;
-        public string BatchId { get; }
+        public string Id { get; }
 
-        public ConcurrentBag<IWorkItem> CompletedWorkItems { get; }
+        public ConcurrentBag<AbstractBatchedWorkItem> CompletedWorkItems { get; }
 
         public WorkBatch(int workBatchSize, string batchId = null)
         {
@@ -19,12 +19,12 @@ namespace BreadWinner
             }
 
             _workBatchSize = workBatchSize;
-            CompletedWorkItems = new ConcurrentBag<IWorkItem>();
+            CompletedWorkItems = new ConcurrentBag<AbstractBatchedWorkItem>();
 
-            BatchId = batchId ?? Guid.NewGuid().ToString();
+            Id = batchId ?? Guid.NewGuid().ToString();
         }
 
-        public bool WorkDone(IWorkItem workItem)
+        public bool WorkDone(AbstractBatchedWorkItem workItem)
         {
             if (_workBatchSize <= 0)
             {

@@ -25,7 +25,7 @@ namespace SamplesShared.BlobExample
         public IWorkItem[] Startup(CancellationToken cancellationToken)
         {
             var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
-            return GetWorkItems(path, "tmp/startup", cancellationToken);
+            return GetWorkItems(path, cancellationToken);
         }
 
         public IWorkItem[] Create(CancellationToken cancellationToken)
@@ -37,21 +37,18 @@ namespace SamplesShared.BlobExample
                 return null;
             }
 
-            return GetWorkItems(path, "tmp/any", cancellationToken);
+            return GetWorkItems(path, cancellationToken);
         }
 
-        private IWorkItem[] GetWorkItems(string sourcePath, string destPath,  CancellationToken cancellationToken)
+        private IWorkItem[] GetWorkItems(string sourcePath, CancellationToken cancellationToken)
         {
             var fileLocations = GetAllFilesWithPatternInBlob(sourcePath, ".*part.*");
             var batch = new WorkBatch(fileLocations.Length);
 
-            if (Directory.Exists(destPath))
-                Directory.Delete(destPath, true);
-
-            CloudConsole.WriteLine($"Created batch {batch.BatchId} with {fileLocations.Length} blobs");
+            CloudConsole.WriteLine($"Created batch {batch.Id} with {fileLocations.Length} blobs");
 
             return fileLocations
-                .Select(x => new ReadFromBlobWorkItem(x.AbsoluteUri, destPath, batch, cancellationToken))
+                .Select(x => new ReadFromBlobWorkItem(x.AbsoluteUri, batch, cancellationToken))
                 .Cast<IWorkItem>()
                 .ToArray();
         }
