@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlobExample\StartupReadFromBlobWorkItem.cs" />
     <Compile Include="CloudConsole.cs" />
     <Compile Include="ISampleWorkFactory.cs" />
     <Compile Include="BlobExample\ReadFromBlobSampleWorkFactory.cs" />

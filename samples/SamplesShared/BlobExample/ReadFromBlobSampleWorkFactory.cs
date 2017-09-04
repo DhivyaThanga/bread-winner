@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -15,6 +13,8 @@ namespace SamplesShared.BlobExample
     {
         private readonly Func<bool> _checkBoundedBufferStatusFunc;
         private readonly WorkAvailableRepo _workAvailableRepo;
+        private string[] _storedData;
+        private readonly object _lock = new object();
 
         public ReadFromBlobSampleWorkFactory(Func<bool> checkBoundedBufferStatusFunc, WorkAvailableRepo workAvailableRepo)
         {
@@ -22,14 +22,23 @@ namespace SamplesShared.BlobExample
             _workAvailableRepo = workAvailableRepo;
         }
 
-        public IWorkItem[] Startup(CancellationToken cancellationToken)
+        public IWorkItem[] Startup(
+            CancellationToken cancellationToken, ManualResetEvent started = null)
         {
             var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
-            return GetWorkItems(path, cancellationToken);
+            return GetWorkItems(
+                path,
+                (uri, batch) =>
+                    new StartupReadFromBlobWorkItem(
+                        started, StoreResults, uri.AbsoluteUri, batch, cancellationToken)
+                        as IWorkItem,
+                cancellationToken);
         }
 
         public IWorkItem[] Create(CancellationToken cancellationToken)
         {
+            GC.Collect();
+
             if (_checkBoundedBufferStatusFunc()) CloudConsole.WriteLine("Bounded buffer healthy");
             var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
             if (!_workAvailableRepo.IsWorkAvailable())
@@ -37,10 +46,23 @@ namespace SamplesShared.BlobExample
                 return null;
             }
 
-            return GetWorkItems(path, cancellationToken);
+            return GetWorkItems(
+                path,
+                (uri, batch) => 
+                    new ReadFromBlobWorkItem(StoreResults, uri.AbsoluteUri, batch, cancellationToken) 
+                    as IWorkItem, 
+                cancellationToken);
         }
 
-        private IWorkItem[] GetWorkItems(string sourcePath, CancellationToken cancellationToken)
+        private void StoreResults(string[] data)
+        {
+            lock (_lock)
+            {
+                _storedData = data;
+            }
+        }
+
+        private static IWorkItem[] GetWorkItems(string sourcePath, Func<Uri, WorkBatch, IWorkItem> workItemFactoryMethod, CancellationToken cancellationToken)
         {
             var fileLocations = GetAllFilesWithPatternInBlob(sourcePath, ".*part.*");
             var batch = new WorkBatch(fileLocations.Length);
@@ -48,8 +70,7 @@ namespace SamplesShared.BlobExample
             CloudConsole.WriteLine($"Created batch {batch.Id} with {fileLocations.Length} blobs");
 
             return fileLocations
-                .Select(x => new ReadFromBlobWorkItem(x.AbsoluteUri, batch, cancellationToken))
-                .Cast<IWorkItem>()
+                .Select(uri => workItemFactoryMethod(uri, batch))
                 .ToArray();
         }
 

@@ -6,6 +6,7 @@ namespace SamplesShared
     public interface ISampleWorkFactory
     {
         IWorkItem[] Create(CancellationToken cancellationToken);
-        IWorkItem[] Startup(CancellationToken cancellationToken);
+
+        IWorkItem[] Startup(CancellationToken cancellationToken, ManualResetEvent started = null);
     }
 }

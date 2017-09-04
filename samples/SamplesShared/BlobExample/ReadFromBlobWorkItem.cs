@@ -12,8 +12,11 @@ namespace SamplesShared.BlobExample
 {
     public class ReadFromBlobWorkItem : AbstractBatchedWorkItem
     {
-        public ReadFromBlobWorkItem(string blobUri, WorkBatch batch, CancellationToken cancellationToken) : base(blobUri, batch, cancellationToken)
+        private readonly Action<string[]> _storeResults;
+
+        public ReadFromBlobWorkItem(Action<string[]> storeResults, string blobUri, WorkBatch batch, CancellationToken cancellationToken) : base(blobUri, batch, cancellationToken)
         {
+            _storeResults = storeResults;
         }
 
         protected override void DoAlways(CancellationToken cancellationToken)
@@ -42,6 +45,8 @@ namespace SamplesShared.BlobExample
             {
                 results.Add((string) done.Result);
             }
+
+            _storeResults(results.ToArray());
 
             CloudConsole.WriteLine($"Batch {Batch.Id} done");
         }

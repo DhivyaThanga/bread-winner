@@ -6,7 +6,7 @@ namespace BreadWinner
 {
     public abstract class Worker : IWorker
     {
-        protected internal Action<CancellationToken> StartupAction;
+        protected internal Action<CancellationToken> StartupAction { get; set; }
 
         protected Thread WrappedThread { get; set; }
 
@@ -19,8 +19,6 @@ namespace BreadWinner
             {
                 cancellationToken.Register(Stop);
             }
-
-            StartupAction?.Invoke(cancellationToken);
 
             WrappedThread = new Thread(GetThreadAction(cancellationToken))
             {
@@ -52,6 +50,8 @@ namespace BreadWinner
             {
                 try
                 {
+                    StartupAction?.Invoke(cancellationToken);
+
                     Loop(cancellationToken);
                 }
                 catch (OperationCanceledException)

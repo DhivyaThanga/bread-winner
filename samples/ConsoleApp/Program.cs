@@ -12,13 +12,16 @@ namespace ConsoleApp
         {
             ServicePointManager.DefaultConnectionLimit = 1000;
 
-            var pool = WorkerPoolExample.CreatePool(
+            var tokenSource = new CancellationTokenSource();
+
+            WorkerPoolExample.StartPool(
                 false,
                 new TimeSpan(0, 0, 0, 30),
                 new TimeSpan(0, 0, 0, 10),
-                100);
-            var tokenSource = new CancellationTokenSource();
-            pool.Start(tokenSource.Token);
+                100,
+                tokenSource.Token);
+
+            CloudConsole.WriteLine("Pool started correctly!");
 
             while (Console.ReadKey().KeyChar != 'q')
             {

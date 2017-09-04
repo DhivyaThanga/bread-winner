@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using BreadWinner;
 using SamplesShared.BlobExample;
 using SamplesShared.DummyExample;
@@ -8,8 +9,12 @@ namespace SamplesShared
     public class WorkerPoolExample
     {
 
-        public static IWorkerPool CreatePool(bool dummy,
-            TimeSpan workArrivedSchedule, TimeSpan producerCheckSchedule, int consumers)
+        public static void StartPool(
+            bool dummy,
+            TimeSpan workArrivedSchedule, 
+            TimeSpan producerCheckSchedule, 
+            int consumers,
+            CancellationToken cancellationToken)
         {
             var factory = new WorkerFactory();
             var workerPool = factory.CreatePool();
@@ -19,16 +24,18 @@ namespace SamplesShared
                 factory.CreateScheduledJob(
                     workArrivedSchedule, token => { workAvailableRepo.Reset(); }));
 
+            var started = new ManualResetEvent(false);
             var workFactory = GetWorkFactory(dummy, workerPool, workAvailableRepo);
             workerPool.Add(factory.CreateProducer(
                 () => new ScheduledProducer(
                     producerCheckSchedule,
                     workFactory.Create,
-                    workFactory.Startup)));
+                    (token) => workFactory.Startup(token, started))));
 
             workerPool.Add(factory.CreateConsumers(consumers));
 
-            return workerPool;
+            workerPool.Start(cancellationToken);
+            started.WaitOne();
         }
 
         private static ISampleWorkFactory GetWorkFactory(bool dummy, IWorkerPool workerPool, WorkAvailableRepo workAvailableRepo)

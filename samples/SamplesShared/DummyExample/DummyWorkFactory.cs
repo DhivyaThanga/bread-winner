@@ -1,9 +1,7 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using BreadWinner;
-using SamplesShared.BlobExample;
 
 namespace SamplesShared.DummyExample
 {
@@ -16,7 +14,7 @@ namespace SamplesShared.DummyExample
             _workAvailableRepo = workAvailableRepo;
         }
 
-        public IWorkItem[] Startup(CancellationToken cancellationToken)
+        public IWorkItem[] Startup(CancellationToken cancellationToken, ManualResetEvent started = null)
         {
             CloudConsole.WriteLine("Producer startup");
             return GetWorkItems(cancellationToken);

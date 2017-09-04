@@ -11,13 +11,12 @@ namespace WebApi
     {
         public void Start(IAppBuilder appBuilder)
         {
-            var pool = WorkerPoolExample.CreatePool(
+            WorkerPoolExample.StartPool(
                 false,
                 new TimeSpan(0, 0, 0, 15), 
                 new TimeSpan(0, 0, 0, 10),
-                2);
-
-            pool.Start(appBuilder.GetOnAppDisposing());
+                2,
+                appBuilder.GetOnAppDisposing());
         }
     }
 }
