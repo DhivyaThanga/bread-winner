@@ -16,8 +16,8 @@ namespace ConsoleApp
 
             WorkerPoolExample.StartPool(
                 false,
-                new TimeSpan(0, 0, 2, 0),
-                new TimeSpan(0, 0, 0, 10),
+                new TimeSpan(0, 0, 0, int.Parse(args[0])),
+                new TimeSpan(0, 0, 0, int.Parse(args[1])),
                 100,
                 tokenSource.Token);
 

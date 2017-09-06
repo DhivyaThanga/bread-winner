@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
-using System.Runtime;
 using System.Text.RegularExpressions;
 using System.Threading;
 using BreadWinner;
@@ -12,43 +11,36 @@ namespace SamplesShared.BlobExample
 {
     public class ReadFromBlobSampleWorkFactory : ISampleWorkFactory
     {
-        private readonly Func<bool> _checkBoundedBufferStatusFunc;
         private readonly WorkAvailableRepo _workAvailableRepo;
-        private byte[] _storedData;
+        private readonly byte[][] _storedData;
         private readonly object _lock = new object();
 
-        public ReadFromBlobSampleWorkFactory(Func<bool> checkBoundedBufferStatusFunc, WorkAvailableRepo workAvailableRepo)
+        public ReadFromBlobSampleWorkFactory(WorkAvailableRepo workAvailableRepo)
         {
-            _checkBoundedBufferStatusFunc = checkBoundedBufferStatusFunc;
             _workAvailableRepo = workAvailableRepo;
+            _storedData = new byte[workAvailableRepo.ConsecutiveAvailableBatches][];
         }
 
         public IWorkItem[] Startup(
             CancellationToken cancellationToken, ManualResetEvent started = null)
         {
-            // This is important when using large object heap extensively
-            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-            GC.Collect();
-
             var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
             return GetWorkItems(
                 path,
                 (uri, batch) =>
                     new StartupReadFromBlobWorkItem(
-                        started, StoreResults, uri.AbsoluteUri, batch, cancellationToken)
+                            started, StoreResults, uri.AbsoluteUri, batch, cancellationToken)
                         as IWorkItem,
-                cancellationToken);
+                0);
         }
 
         public IWorkItem[] Create(CancellationToken cancellationToken)
         {
-            // This is important when using large object heap extensively
-            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-            GC.Collect();
-
-            if (_checkBoundedBufferStatusFunc()) CloudConsole.WriteLine("Bounded buffer healthy");
             var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
-            if (!_workAvailableRepo.IsWorkAvailable())
+
+            var batchId = _workAvailableRepo.WorkAvailableId();
+
+            if (batchId < 0)
             {
                 return null;
             }
@@ -56,23 +48,27 @@ namespace SamplesShared.BlobExample
             return GetWorkItems(
                 path,
                 (uri, batch) => 
-                    new ReadFromBlobWorkItem(StoreResults, uri.AbsoluteUri, batch, cancellationToken) 
-                    as IWorkItem, 
-                cancellationToken);
+                    new ReadFromBlobWorkItem(
+                        StoreResults,
+                        uri.AbsoluteUri,
+                        batch,
+                        cancellationToken) 
+                    as IWorkItem,
+                batchId);
         }
 
-        private void StoreResults(byte[] data)
+        private void StoreResults(byte[] data, int batchId)
         {
             lock (_lock)
             {
-                _storedData = data;
+                _storedData[batchId] = data;
             }
         }
 
-        private static IWorkItem[] GetWorkItems(string sourcePath, Func<Uri, WorkBatch, IWorkItem> workItemFactoryMethod, CancellationToken cancellationToken)
+        private static IWorkItem[] GetWorkItems(string sourcePath, Func<Uri, WorkBatch, IWorkItem> workItemFactoryMethod, int batchId)
         {
             var fileLocations = GetAllFilesWithPatternInBlob(sourcePath, ".*part.*");
-            var batch = new WorkBatch(fileLocations.Length);
+            var batch = new WorkBatch(fileLocations.Length, batchId.ToString());
 
             CloudConsole.WriteLine($"Created batch {batch.Id} with {fileLocations.Length} blobs");
 

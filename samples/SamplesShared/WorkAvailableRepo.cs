@@ -1,38 +1,33 @@
-﻿using System.Diagnostics;
-using System.Threading;
-using BreadWinner;
-using SamplesShared.BlobExample;
+﻿using System.Threading;
 
 namespace SamplesShared
 {
     public class WorkAvailableRepo
     {
         private int _count;
-        private readonly int _consecutiveAvailableBatches;
-        public IWorker Job { get; }
-
+        public int ConsecutiveAvailableBatches { get; }
 
         public WorkAvailableRepo(int consecutiveAvailableBatches)
         {
-            _consecutiveAvailableBatches = consecutiveAvailableBatches;
+            ConsecutiveAvailableBatches = consecutiveAvailableBatches;
         }
 
         public void Reset()
         {
             CloudConsole.WriteLine("Work Arrived!!");
-            Interlocked.Exchange(ref _count, 0);
+            Interlocked.Exchange(ref _count, -1);
         }
 
-        public bool IsWorkAvailable()
+        public int WorkAvailableId()
         {
-            if (_count >= _consecutiveAvailableBatches)
-            {
-                return false;
-            }
-
             Interlocked.Increment(ref _count);
 
-            return true;
+            if (_count >= ConsecutiveAvailableBatches)
+            {
+                return -1;
+            }
+
+            return _count;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace SamplesShared.DummyExample
 
         public IWorkItem[] Create(CancellationToken cancellationToken)
         {
-            if (!_workAvailableRepo.IsWorkAvailable())
+            if (_workAvailableRepo.WorkAvailableId() < 0)
             {
                 return null;
             }

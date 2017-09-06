@@ -20,7 +20,7 @@ namespace SamplesShared
             var factory = new WorkerFactory();
             var workerPool = factory.CreatePool();
 
-            var workAvailableRepo = new WorkAvailableRepo(1);
+            var workAvailableRepo = new WorkAvailableRepo(6);
             workerPool.Add(
                 factory.CreateScheduledJob(
                     workArrivedSchedule, token => { workAvailableRepo.Reset(); }));
@@ -44,8 +44,7 @@ namespace SamplesShared
         {
             if (!dummy)
             {
-                return new ReadFromBlobSampleWorkFactory(
-                    () => workerPool.IsAlive, workAvailableRepo);
+                return new ReadFromBlobSampleWorkFactory(workAvailableRepo);
             }
 
             return new DummyWorkFactory(workAvailableRepo);
