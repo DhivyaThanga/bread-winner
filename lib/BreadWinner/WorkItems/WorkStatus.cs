@@ -1,6 +1,6 @@
 namespace BreadWinner
 {
-    public enum WorkItemStatus
+    public enum WorkStatus
     {
         Scheduled,
         Successful,

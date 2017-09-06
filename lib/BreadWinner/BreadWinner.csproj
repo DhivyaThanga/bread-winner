@@ -39,6 +39,7 @@
     <Compile Include="Workers\IWorker.cs" />
     <Compile Include="Workers\AbstractProducer.cs" />
     <Compile Include="Workers\IWorkerPool.cs" />
+    <Compile Include="WorkItems\IWorkBatch.cs" />
     <Compile Include="WorkItems\IWorkItem.cs" />
     <Compile Include="IWorkerFactory.cs" />
     <Compile Include="Workers\Consumer.cs" />
@@ -48,7 +49,7 @@
     <Compile Include="Workers\Worker.cs" />
     <Compile Include="WorkItems\AbstractBatchedWorkItem.cs" />
     <Compile Include="WorkerFactory.cs" />
-    <Compile Include="WorkItems\WorkItemStatus.cs" />
+    <Compile Include="WorkItems\WorkStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,7 +8,8 @@ namespace SamplesShared.BlobExample
     {
         private readonly ManualResetEvent _started;
 
-        public StartupReadFromBlobWorkItem(ManualResetEvent started, Action<string[]> storeResults, string blobUri, WorkBatch batch, CancellationToken cancellationToken) : base(storeResults, blobUri, batch, cancellationToken)
+        public StartupReadFromBlobWorkItem(
+            ManualResetEvent started, Action<byte[]> storeResults, string blobUri, WorkBatch batch, CancellationToken cancellationToken) : base(storeResults, blobUri, batch, cancellationToken)
         {
             _started = started;
         }

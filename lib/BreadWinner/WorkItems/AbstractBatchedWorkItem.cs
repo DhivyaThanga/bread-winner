@@ -6,14 +6,19 @@ namespace BreadWinner
     public abstract class AbstractBatchedWorkItem : IWorkItem
     {
         private readonly CancellationToken _cancellationToken;
+        private int _status;
 
-        protected WorkBatch Batch { get; }
+        protected IWorkBatch Batch { get; }
         public string Id { get; }
-        public WorkItemStatus WorkItemStatus { get; protected set; }
         public object Result { get; protected set; }
+        public WorkStatus Status
+        {
+            get { return (WorkStatus)_status; }
+            set { Interlocked.Exchange(ref _status, (int)value); }
+        }
 
         protected AbstractBatchedWorkItem(
-            string id, WorkBatch batch, CancellationToken cancellationToken)
+            string id, IWorkBatch batch, CancellationToken cancellationToken)
         {
             Id = id;
             Batch = batch;

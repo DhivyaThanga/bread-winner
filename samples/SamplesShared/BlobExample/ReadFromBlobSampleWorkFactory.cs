@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Runtime;
 using System.Text.RegularExpressions;
 using System.Threading;
 using BreadWinner;
@@ -13,7 +14,7 @@ namespace SamplesShared.BlobExample
     {
         private readonly Func<bool> _checkBoundedBufferStatusFunc;
         private readonly WorkAvailableRepo _workAvailableRepo;
-        private string[] _storedData;
+        private byte[] _storedData;
         private readonly object _lock = new object();
 
         public ReadFromBlobSampleWorkFactory(Func<bool> checkBoundedBufferStatusFunc, WorkAvailableRepo workAvailableRepo)
@@ -25,6 +26,10 @@ namespace SamplesShared.BlobExample
         public IWorkItem[] Startup(
             CancellationToken cancellationToken, ManualResetEvent started = null)
         {
+            // This is important when using large object heap extensively
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect();
+
             var path = ConfigurationManager.AppSettings["Azure.Storage.Path"];
             return GetWorkItems(
                 path,
@@ -37,6 +42,8 @@ namespace SamplesShared.BlobExample
 
         public IWorkItem[] Create(CancellationToken cancellationToken)
         {
+            // This is important when using large object heap extensively
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
             GC.Collect();
 
             if (_checkBoundedBufferStatusFunc()) CloudConsole.WriteLine("Bounded buffer healthy");
@@ -54,7 +61,7 @@ namespace SamplesShared.BlobExample
                 cancellationToken);
         }
 
-        private void StoreResults(string[] data)
+        private void StoreResults(byte[] data)
         {
             lock (_lock)
             {

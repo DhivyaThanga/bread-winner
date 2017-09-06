@@ -4,12 +4,22 @@ using System.Threading;
 
 namespace BreadWinner
 {
-    public class WorkBatch
+    public class WorkBatch : IWorkBatch
     {
         private int _workBatchSize;
+        private int _status;
+        private readonly ConcurrentBag<object> _results;
+
+
         public string Id { get; }
 
-        public ConcurrentBag<AbstractBatchedWorkItem> CompletedWorkItems { get; }
+        public WorkStatus Status
+        {
+            get { return (WorkStatus) _status; }
+            set { Interlocked.Exchange(ref _status, (int) value); }
+        }
+
+        public object[] Results => _results.ToArray();
 
         public WorkBatch(int workBatchSize, string batchId = null)
         {
@@ -19,9 +29,10 @@ namespace BreadWinner
             }
 
             _workBatchSize = workBatchSize;
-            CompletedWorkItems = new ConcurrentBag<AbstractBatchedWorkItem>();
+            _results = new ConcurrentBag<object>();
 
             Id = batchId ?? Guid.NewGuid().ToString();
+            Status = WorkStatus.Scheduled;
         }
 
         public bool WorkDone(AbstractBatchedWorkItem workItem)
@@ -32,9 +43,27 @@ namespace BreadWinner
             }
 
             Interlocked.Decrement(ref _workBatchSize);
-            CompletedWorkItems.Add(workItem);
+            var batchDone = _workBatchSize == 0;
 
-            return _workBatchSize == 0;
+            if (workItem.Status == WorkStatus.Failed)
+            {
+                Status = WorkStatus.Failed;
+            }
+            else
+            {
+                WorkItemWasSuccessful(workItem, batchDone);
+            }
+
+            return batchDone;
+        }
+
+        private void WorkItemWasSuccessful(AbstractBatchedWorkItem workItem, bool batchDone)
+        {
+            _results.Add(workItem.Result);
+            if (batchDone)
+            {
+                Status = WorkStatus.Successful;
+            }
         }
     }
 }

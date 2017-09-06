@@ -1,4 +1,5 @@
 using System;
+using System.Runtime;
 using System.Threading;
 using BreadWinner;
 using SamplesShared.BlobExample;
@@ -30,7 +31,8 @@ namespace SamplesShared
                 () => new ScheduledProducer(
                     producerCheckSchedule,
                     workFactory.Create,
-                    (token) => workFactory.Startup(token, started))));
+                    (token) => workFactory.Startup(token, started),
+                    started)));
 
             workerPool.Add(factory.CreateConsumers(consumers));
 

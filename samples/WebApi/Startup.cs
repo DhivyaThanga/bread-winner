@@ -1,7 +1,9 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Castle.Windsor;
 using Microsoft.Owin;
 using Owin;
+using SamplesShared;
 using WebApi;
 using WebApi.Extensions;
 using WebApi.IoC.Extensions;
@@ -27,7 +29,12 @@ namespace WebApi
             config.UseDefaultJsonConverter();
             config.UseDefaultRoutes();
 
-            new BoundedBufferStartup().Start(appBuilder);
+            WorkerPoolExample.StartPool(
+                false,
+                new TimeSpan(0, 0, 0, 15),
+                new TimeSpan(0, 0, 0, 10),
+                2,
+                appBuilder.GetOnAppDisposing());
 
             appBuilder
                 .UseWindsorScopeMidddleware()
