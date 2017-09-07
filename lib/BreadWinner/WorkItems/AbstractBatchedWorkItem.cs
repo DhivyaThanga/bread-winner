@@ -23,6 +23,7 @@ namespace BreadWinner
             Id = id;
             Batch = batch;
             _cancellationToken = cancellationToken;
+            Status = WorkStatus.Scheduled;
         }
 
         public void Do(CancellationToken cancellationToken)

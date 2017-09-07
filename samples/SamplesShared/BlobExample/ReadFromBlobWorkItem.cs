@@ -51,7 +51,7 @@ namespace SamplesShared.BlobExample
 
                 _storeResults(results.ToArray(), int.Parse(Batch.Id));
 
-                // This is important when using large object heap extensively
+                //// This is important when using large object heap extensively
                 GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
                 GC.Collect();
 

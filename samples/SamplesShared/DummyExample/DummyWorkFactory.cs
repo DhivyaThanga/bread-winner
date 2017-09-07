@@ -33,12 +33,12 @@ namespace SamplesShared.DummyExample
         private static IWorkItem[] GetWorkItems(CancellationToken cancellationToken)
         {
             var rand = new Random();
-            var synchronizer = new WorkBatch(3);
+            var workBatch = new WorkBatch(3);
             var workItems = new[]
             {
-                new DummyWorkItem(rand.Next(), synchronizer, cancellationToken),
-                new DummyWorkItem(rand.Next(), synchronizer, cancellationToken),
-                new DummyWorkItem(rand.Next(), synchronizer, cancellationToken)
+                new DummyWorkItem(rand.Next(), workBatch, cancellationToken),
+                new DummyWorkItem(rand.Next(), workBatch, cancellationToken),
+                new DummyWorkItem(rand.Next(), workBatch, cancellationToken)
             };
 
             CloudConsole.WriteLine(

@@ -38,18 +38,18 @@ namespace BreadWinner
 
         public IWorker[] CreateConsumers(int n)
         {
-            var consumers = new List<IWorker>();
+            var consumers = new IWorker[n];
             for (var i = 0; i < n; i++)
             {
-                consumers.Add(new Consumer(TakeWork));
+                consumers[i] = new Consumer(TakeWork);
             }
 
-            return consumers.ToArray();
+            return consumers;
         }
 
-        private void AddWork(IWorkItem[] workBatch, CancellationToken cancellationToken)
+        private void AddWork(IWorkItem[] workItems, CancellationToken cancellationToken)
         {
-            foreach (var workItem in workBatch)
+            foreach (var workItem in workItems)
             {
                 _workQueue.Add(workItem, cancellationToken);
             }

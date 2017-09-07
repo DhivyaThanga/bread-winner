@@ -26,14 +26,14 @@ namespace SamplesShared
         protected override void Startup(
             Action<IWorkItem[], CancellationToken> addWork, CancellationToken cancellationToken)
         {
-            var workBatch = _startupMethod?.Invoke(cancellationToken);
+            var workItems = _startupMethod?.Invoke(cancellationToken);
 
-            if (workBatch == null || cancellationToken.IsCancellationRequested)
+            if (workItems == null || cancellationToken.IsCancellationRequested)
             {
                 return;
             }
 
-            addWork(workBatch, cancellationToken);
+            addWork(workItems, cancellationToken);
 
             _started?.WaitOne();
         }
@@ -44,14 +44,14 @@ namespace SamplesShared
         {
             while (true)
             {
-                var workBatch = _workFactoryMethod(cancellationToken);
+                var workItems = _workFactoryMethod(cancellationToken);
 
-                if (workBatch == null || cancellationToken.IsCancellationRequested)
+                if (workItems == null || cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }
 
-                addWork(workBatch, cancellationToken);
+                addWork(workItems, cancellationToken);
             }
         }
 
