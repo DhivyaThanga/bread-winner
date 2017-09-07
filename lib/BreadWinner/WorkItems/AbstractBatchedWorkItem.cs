@@ -10,7 +10,7 @@ namespace BreadWinner
 
         protected IWorkBatch Batch { get; }
         public string Id { get; }
-        public object Result { get; protected set; }
+        public object Result { get; private set; }
         public WorkStatus Status
         {
             get { return (WorkStatus)_status; }
@@ -18,17 +18,18 @@ namespace BreadWinner
         }
 
         protected AbstractBatchedWorkItem(
-            string id, IWorkBatch batch, CancellationToken cancellationToken)
+            string id, IWorkBatch batch, CancellationToken cancellationToken, object result)
         {
             Id = id;
             Batch = batch;
             _cancellationToken = cancellationToken;
+            Result = result;
             Status = WorkStatus.Scheduled;
         }
 
         public void Do(CancellationToken cancellationToken)
         {
-            DoAlways(_cancellationToken);
+            Status = DoAlways(_cancellationToken);
 
             if (Batch.WorkDone(this))
             {
@@ -36,7 +37,7 @@ namespace BreadWinner
             }
         }
 
-        protected abstract void DoAlways(CancellationToken cancellationToken);
+        protected abstract WorkStatus DoAlways(CancellationToken cancellationToken);
 
         protected abstract void DoFinally(CancellationToken cancellationToken);
     }

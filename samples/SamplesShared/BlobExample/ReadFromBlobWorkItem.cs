@@ -19,7 +19,7 @@ namespace SamplesShared.BlobExample
             _storeResults = storeResults;
         }
 
-        protected override void DoAlways(CancellationToken cancellationToken)
+        protected override WorkStatus DoAlways(CancellationToken cancellationToken)
         {
             try
             {
@@ -28,12 +28,13 @@ namespace SamplesShared.BlobExample
                 var blockBlob = GetBlobReference(storageAccount, Id);
 
                 Result = DownloadBlobToMemory(blockBlob);
-                Status = WorkStatus.Successful;
+
+                return WorkStatus.Successful;
             }
             catch (Exception e)
             {
                 CloudConsole.WriteLine($"Work Item {Id} of {Batch.Id} failed, exception {e.Message}");
-                Status = WorkStatus.Failed;
+                return WorkStatus.Failed;
             }
         }
 

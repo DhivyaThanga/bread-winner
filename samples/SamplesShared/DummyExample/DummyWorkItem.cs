@@ -14,11 +14,13 @@ namespace SamplesShared.DummyExample
         {
         }
 
-        protected override void DoAlways(CancellationToken cancellationToken)
+        protected override WorkStatus DoAlways(CancellationToken cancellationToken)
         {
             CloudConsole.WriteLine($"Consumer {Thread.CurrentThread.ManagedThreadId} consuming {Id}");
 
             cancellationToken.WaitHandle.WaitOne(2000);
+
+            return WorkStatus.Successful;
         }
 
         protected override void DoFinally(CancellationToken cancellationToken)

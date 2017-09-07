@@ -30,7 +30,6 @@ namespace BreadWinner
 
             _workBatchSize = workBatchSize;
             _results = new ConcurrentBag<object>();
-
             Id = batchId ?? Guid.NewGuid().ToString();
             Status = WorkStatus.Scheduled;
         }

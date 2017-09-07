@@ -11,11 +11,12 @@ namespace SamplesShared
     {
         public static void WriteLine(string line)
         {
-#if CONSOLE
-            Console.WriteLine(
+            if (HasMainWindow())
+            {
+                Console.WriteLine(
                     $"[{DateTime.Now.ToString("hh:mm:ss.fff", CultureInfo.InvariantCulture)}] - {line}");
                 return;
-#endif
+            }
 
 #if DEBUG
             Debug.WriteLine($"{line}");
@@ -33,6 +34,11 @@ namespace SamplesShared
                 new TableEntity((long.MaxValue - DateTime.Now.Ticks).ToString(), line));
 
             table.Execute(operation);
+        }
+
+        public static bool HasMainWindow()
+        {
+            return (Process.GetCurrentProcess().MainWindowHandle != IntPtr.Zero);
         }
     }
 }
