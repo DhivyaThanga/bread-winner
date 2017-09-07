@@ -11,12 +11,8 @@ namespace SamplesShared
     {
         public static void WriteLine(string line)
         {
-            if (HasMainWindow())
-            {
-                Console.WriteLine(
+            Console.WriteLine(
                     $"[{DateTime.Now.ToString("hh:mm:ss.fff", CultureInfo.InvariantCulture)}] - {line}");
-                return;
-            }
 
 #if DEBUG
             Debug.WriteLine($"{line}");

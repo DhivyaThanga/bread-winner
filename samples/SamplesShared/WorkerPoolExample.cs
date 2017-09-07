@@ -17,30 +17,35 @@ namespace SamplesShared
             int consumers,
             CancellationToken cancellationToken)
         {
-            var factory = new WorkerFactory();
-            var workerPool = factory.CreatePool();
-
             var workAvailableRepo = new WorkAvailableRepo(6);
-            workerPool.Add(
-                factory.CreateScheduledJob(
-                    workArrivedSchedule, token => { workAvailableRepo.Reset(); }));
-
             var started = new ManualResetEvent(false);
-            var workFactory = GetWorkFactory(dummy, workerPool, workAvailableRepo);
-            workerPool.Add(factory.CreateProducer(
-                () => new ScheduledProducer(
-                    producerCheckSchedule,
-                    workFactory.Create,
-                    (token) => workFactory.Startup(token, started),
-                    started)));
 
-            workerPool.Add(factory.CreateConsumers(consumers));
+            var workFactory = GetWorkFactory(dummy, workAvailableRepo);
+
+            var workerPool =
+                new WorkPoolBuilder()
+                    .WithScheduledJob(
+                        workArrivedSchedule, token => { workAvailableRepo.Reset(); })
+                    .WithProducer(
+                        ProducerFactoryMethod(producerCheckSchedule, workFactory, started))
+                    .WithNConsumers(consumers)
+                    .Build();
 
             workerPool.Start(cancellationToken);
+
             started.WaitOne();
         }
 
-        private static ISampleWorkFactory GetWorkFactory(bool dummy, IWorkerPool workerPool, WorkAvailableRepo workAvailableRepo)
+        private static Func<AbstractProducer> ProducerFactoryMethod(TimeSpan producerCheckSchedule, ISampleWorkFactory workFactory, ManualResetEvent started)
+        {
+            return () => new ScheduledProducer(
+                producerCheckSchedule,
+                workFactory.Create,
+                (token) => workFactory.Startup(token, started),
+                started);
+        }
+
+        private static ISampleWorkFactory GetWorkFactory(bool dummy, WorkAvailableRepo workAvailableRepo)
         {
             if (!dummy)
             {
