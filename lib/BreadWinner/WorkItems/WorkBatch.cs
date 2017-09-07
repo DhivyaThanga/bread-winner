@@ -42,8 +42,7 @@ namespace BreadWinner
                 throw new ApplicationException("Batch completed");
             }
 
-            Interlocked.Decrement(ref _workBatchSize);
-            var batchDone = _workBatchSize == 0;
+            var batchDone = Interlocked.Decrement(ref _workBatchSize) == 0;
 
             if (workItem.Status == WorkStatus.Failed)
             {
