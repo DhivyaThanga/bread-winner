@@ -48,7 +48,6 @@
     <Compile Include="Workers\WorkerPool.cs" />
     <Compile Include="Workers\Worker.cs" />
     <Compile Include="WorkItems\AbstractBatchedWorkItem.cs" />
-    <Compile Include="WorkerFactory.cs" />
     <Compile Include="WorkItems\WorkStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkPoolBuilder.cs" />
